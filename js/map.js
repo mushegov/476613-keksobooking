@@ -146,5 +146,8 @@ var generateRandomAdvert = function () {
 // Задачи
 // -------------
 
-//
+// Массив случайных объявлений
 var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
+
+// Показываем карту
+document.querySelector('.map').classList.remove('map--faded');
