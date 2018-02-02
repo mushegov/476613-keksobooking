@@ -39,6 +39,9 @@ var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 150;
 var LOCATION_Y_MAX = 500;
 
+// Смещение по оси Y для рендера геоточек
+var PIN_OFFSET = 35;
+
 // -------------
 
 
@@ -139,6 +142,37 @@ var generateRandomAdvert = function () {
   return advert;
 };
 
+// Генерируем элемент геоточки объявления
+var renderAdvertPin = function (data, template) {
+  // Создаем элемент из шаблона
+  var element = template.cloneNode(true);
+
+  // Записываем данные в элемент
+  element.querySelector('.map__pin').style.left = data.location.x + 'px';
+  element.querySelector('.map__pin').style.top = data.location.y - PIN_OFFSET + 'px';
+  element.querySelector('img').src = data.avatar;
+
+  return element;
+};
+
+// Генерируем элемент списка геоточек
+var renderAdvertsPins = function (array) {
+  // Создаем шаблон
+  var template = document.querySelector('#advert').content;
+
+  // Создаем фрагмент
+  var fragment = document.createDocumentFragment();
+
+  // Генерируем элемент для каждого объявления и добавляем его во фрагмент
+  for (var i = 0; i < array.length; i++) {
+    var element = renderAdvertPin(array[i], template);
+    fragment.appendChild(element);
+  }
+
+  // Вставляем готовый фрагмент в DOM
+  document.querySelector('.map__pins').appendChild(fragment);
+};
+
 // -------------
 
 
@@ -148,6 +182,10 @@ var generateRandomAdvert = function () {
 
 // Массив случайных объявлений
 var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
+console.log(adverts);
 
 // Показываем карту
 document.querySelector('.map').classList.remove('map--faded');
+
+//
+renderAdvertsPins(adverts);
