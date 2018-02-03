@@ -8,30 +8,67 @@
 var ADVERTS_AMOUNT = 8;
 
 //
-var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
+var AVATARS = [
+  'img/avatars/user01.png',
+  'img/avatars/user02.png',
+  'img/avatars/user03.png',
+  'img/avatars/user04.png',
+  'img/avatars/user05.png',
+  'img/avatars/user06.png',
+  'img/avatars/user07.png',
+  'img/avatars/user08.png'
+];
 
 // Заголовки объявления
-var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+var TITLES = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
 
 // Минимальная и максимальная цена аренды
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 
 // Типы обьявлений
-var TYPES = ['flat', 'house', 'bungalo'];
+var TYPES = [
+  'flat',
+  'house',
+  'bungalo'
+];
 
 // Минимальное и максимальное количество комнат
 var ROOMS_MIN = 1;
 var ROOMS_MAX = 5;
 
 // Варианты времени чекина и чекаута
-var CHECKIN_CHECKOUT_TIME = ['12:00', '13:00', '14:00'];
+var CHECKIN_CHECKOUT_TIME = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
 
 // Удобства
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
 
 // Фото
-var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
 
 // Минимальные и максимальные координаты
 var LOCATION_X_MIN = 300;
@@ -41,6 +78,9 @@ var LOCATION_Y_MAX = 500;
 
 // Смещение по оси Y для рендера геоточек
 var PIN_OFFSET = 35;
+
+// Шаблоны
+var TEMPLATES = document.querySelector('template');
 
 // -------------
 
@@ -81,6 +121,19 @@ var getRandomIntInclusive = function (min, max) {
   max = Math.floor(max);
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// Переводим тип объявления
+var translateOfferType = function (type) {
+  if (type === 'flat') {
+    type = 'Квартира';
+  } else if (type === 'bungalo') {
+    type = 'Бунгало';
+  } else if (type === 'house') {
+    type = 'Дом';
+  }
+
+  return type;
 };
 
 // Геренируем случайное расположение
@@ -148,17 +201,55 @@ var renderAdvertPin = function (data, template) {
   var element = template.cloneNode(true);
 
   // Записываем данные в элемент
-  element.querySelector('.map__pin').style.left = data.location.x + 'px';
-  element.querySelector('.map__pin').style.top = data.location.y - PIN_OFFSET + 'px';
+  element.style.left = data.location.x + 'px';
+  element.style.top = data.location.y - PIN_OFFSET + 'px';
   element.querySelector('img').src = data.avatar;
 
   return element;
 };
 
+// Очиащаем элемент
+var clearNodeChildren = function (element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
+
+//
+var renderAdvertCardFeatures = function (array, container) {
+  // Очищаем элемент
+  clearNodeChildren(container);
+
+  // Генерируем элементы для каждого удобства
+  for (var i = 0; i < array.length; i++) {
+    var item = document.createElement('li');
+    item.classList.add('feature', 'feature--' + array[i]);
+    container.appendChild(item);
+  }
+};
+
+//
+var renderAdvertCardPhotos = function (array, container) {
+  // Очищаем элемент
+  clearNodeChildren(container);
+
+  // Генерируем элементы для каждого удобства
+  for (var i = 0; i < array.length; i++) {
+    var item = document.createElement('li');
+    var image = document.createElement('img');
+
+    image.src = array[i];
+    image.width = 210;
+
+    item.appendChild(image);
+    container.appendChild(item);
+  }
+};
+
 // Генерируем элемент списка геоточек
 var renderAdvertsPins = function (array) {
   // Создаем шаблон
-  var template = document.querySelector('#advert').content;
+  var template = TEMPLATES.content.querySelector('.map__pin');
 
   // Создаем фрагмент
   var fragment = document.createDocumentFragment();
@@ -173,6 +264,34 @@ var renderAdvertsPins = function (array) {
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
+// Генерируем элемент списка геоточек
+var renderMapCard = function (data) {
+  // Создаем шаблон
+  var template = TEMPLATES.content.querySelector('.map__card');
+
+  // Создаем элемент из шаблона
+  var element = template.cloneNode(true);
+
+  // Записываем данные в элемент
+  element.querySelector('.popup__avatar').src = data.avatar;
+  element.querySelector('h3').textContent = data.offer.title;
+  element.querySelector('p small').textContent = data.offer.address;
+  element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
+  element.querySelector('h4').textContent = translateOfferType(data.offer.type);
+  element.querySelector('h4 + p').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+  element.querySelector('h4 + p + p').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+  element.querySelector('.popup__features + p').textContent = data.offer.description;
+
+  // Отрисовываем удобства
+  renderAdvertCardFeatures(data.offer.features, element.querySelector('.popup__features'));
+
+  // Отрисовываем фото
+  renderAdvertCardPhotos(data.offer.photos, element.querySelector('.popup__pictures'));
+
+  // Вставляем готовый фрагмент в DOM
+  document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
+};
+
 // -------------
 
 
@@ -182,10 +301,12 @@ var renderAdvertsPins = function (array) {
 
 // Массив случайных объявлений
 var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
-console.log(adverts);
 
 // Показываем карту
 document.querySelector('.map').classList.remove('map--faded');
 
-//
+// Отрисовываем геоточки объявлений на карту
 renderAdvertsPins(adverts);
+
+// Отрисовываем карточку первого элемента массива объявлений
+renderMapCard(adverts[0]);
