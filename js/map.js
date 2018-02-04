@@ -89,19 +89,16 @@ var TEMPLATES = document.querySelector('template');
 // ФУНКЦИИ
 // -------------
 
-// Генерируем новый массив наполненный случайными неповторяющимися элементами из переданного массива, можно задать нужный размер нового массива
-var shuffleArray = function (array, length) {
+// Генерируем новый массив наполненный случайными неповторяющимися элементами из переданного массива
+var shuffleArray = function (array) {
   // Объявляем новый массив в котором будет перемешанные значение из исходногом массива
   var newArray = [];
 
   // Копируем исходный массив во временный массив
   var tempArray = array.slice(0);
 
-  // Если передана нужная длинная массива то используем её, иначе проходим весь массив
-  var iterationCount = length ? length - 1 : tempArray.length - 1;
-
   // Цикл
-  for (var i = iterationCount; i >= 0; i--) {
+  for (var i = tempArray.length - 1; i >= 0; i--) {
     // Генерируем случайный индекс массива
     var randomId = getRandomIntInclusive(0, tempArray.length - 1);
 
@@ -143,6 +140,17 @@ var getRandomArrayElement = function (array, removeUsedElement) {
   return element;
 };
 
+// Получаем несколько случайных элементов из массива
+var getRandomArrayElements = function (array, amount, removeUsedElement) {
+  var newArray = [];
+
+  for (var i = 0; i < amount; i++) {
+    newArray.push(getRandomArrayElement(array, removeUsedElement));
+  }
+
+  return newArray;
+};
+
 // Создаем массив случайных объявлений
 var generateAdvertsArray = function (amount) {
   var array = [];
@@ -175,7 +183,7 @@ var generateRandomAdvert = function () {
       'guests': getRandomIntInclusive(1, 15),
       'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
       'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-      'features': shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
+      'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
       'description': '',
       'photos': shuffleArray(PHOTOS)
     },
