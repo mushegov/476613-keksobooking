@@ -36,11 +36,11 @@ var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 
 // Типы обьявлений
-var TYPES = [
-  'flat',
-  'house',
-  'bungalo'
-];
+var TYPES = {
+  'flat': 'Квартира',
+  'house': 'Бунгало',
+  'bungalo': 'Дом'
+};
 
 // Минимальное и максимальное количество комнат
 var ROOMS_MIN = 1;
@@ -123,20 +123,14 @@ var getRandomIntInclusive = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Переводим тип объявления
-var translateOfferType = function (type) {
-  if (type === 'flat') {
-    type = 'Квартира';
-  } else if (type === 'bungalo') {
-    type = 'Бунгало';
-  } else if (type === 'house') {
-    type = 'Дом';
-  }
+// Получаем случайный ключ из объекта
+var getRandomProperty = function (obj) {
+  var keys = Object.keys(obj);
 
-  return type;
+  return keys[keys.length * Math.random() << 0];
 };
 
-// Выбираем случайный элемент из массива
+// Получаем случайный элемент из массива
 var getRandomArrayElement = function (array, removeUsedElement) {
   var id = Math.floor(Math.random() * array.length);
   var element = array[id];
@@ -176,7 +170,7 @@ var generateRandomAdvert = function () {
       'title': getRandomArrayElement(TITLES, true),
       'address': '{{' + location.x + '}}, {{' + location.y + '}}',
       'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
-      'type': getRandomArrayElement(TYPES),
+      'type': getRandomProperty(TYPES),
       'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
       'guests': getRandomIntInclusive(1, 15),
       'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
@@ -214,7 +208,7 @@ var deleteNodeChildren = function (element) {
   return newElement;
 };
 
-//
+// Отрисовываем удобства на карточку объявления
 var renderAdvertCardFeatures = function (array, container) {
   // Очищаем элемент
   container = deleteNodeChildren(container);
@@ -227,7 +221,7 @@ var renderAdvertCardFeatures = function (array, container) {
   }
 };
 
-//
+// Отрисовываем фотографии на карточку объявления
 var renderAdvertCardPhotos = function (array, container) {
   // Очищаем элемент
   container = deleteNodeChildren(container);
@@ -276,7 +270,7 @@ var renderMapCard = function (data) {
   element.querySelector('h3').textContent = data.offer.title;
   element.querySelector('p small').textContent = data.offer.address;
   element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
-  element.querySelector('h4').textContent = translateOfferType(data.offer.type);
+  element.querySelector('h4').textContent = TYPES[data.offer.type];
   element.querySelector('h4 + p').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
   element.querySelector('h4 + p + p').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
   element.querySelector('.popup__features + p').textContent = data.offer.description;
