@@ -136,16 +136,6 @@ var translateOfferType = function (type) {
   return type;
 };
 
-// Геренируем случайное расположение
-var getRandomLocation = function () {
-  var location = {};
-
-  location.x = getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX);
-  location.y = getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX);
-
-  return location;
-};
-
 // Выбираем случайный элемент из массива
 var getRandomArrayElement = function (array, removeUsedElement) {
   var id = Math.floor(Math.random() * array.length);
@@ -173,24 +163,30 @@ var generateAdvertsArray = function (amount) {
 
 // Создаем случайное объявление
 var generateRandomAdvert = function () {
-  var advert = {};
+  var location = {
+    'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+    'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+  };
 
-  advert.avatar = getRandomArrayElement(AVATARS, true);
-
-  advert.location = getRandomLocation();
-
-  advert.offer = {};
-  advert.offer.title = getRandomArrayElement(TITLES, true);
-  advert.offer.address = '{{' + advert.location.x + '}}, {{' + advert.location.y + '}}';
-  advert.offer.price = getRandomIntInclusive(PRICE_MIN, PRICE_MAX);
-  advert.offer.type = getRandomArrayElement(TYPES);
-  advert.offer.rooms = getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX);
-  advert.offer.guests = getRandomIntInclusive(1, 15);
-  advert.offer.checkin = getRandomArrayElement(CHECKIN_CHECKOUT_TIME);
-  advert.offer.checkout = getRandomArrayElement(CHECKIN_CHECKOUT_TIME);
-  advert.offer.features = shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length));
-  advert.offer.description = '';
-  advert.offer.photos = shuffleArray(PHOTOS);
+  var advert = {
+    'author': {
+      'avatar': getRandomArrayElement(AVATARS, true)
+    },
+    'offer': {
+      'title': getRandomArrayElement(TITLES, true),
+      'address': '{{' + location.x + '}}, {{' + location.y + '}}',
+      'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+      'type': getRandomArrayElement(TYPES),
+      'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+      'guests': getRandomIntInclusive(1, 15),
+      'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+      'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+      'features': shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
+      'description': '',
+      'photos': shuffleArray(PHOTOS)
+    },
+    'location': location
+  };
 
   return advert;
 };
@@ -203,22 +199,25 @@ var renderAdvertPin = function (data, template) {
   // Записываем данные в элемент
   element.style.left = data.location.x + 'px';
   element.style.top = data.location.y - PIN_OFFSET + 'px';
-  element.querySelector('img').src = data.avatar;
+  element.querySelector('img').src = data.author.avatar;
 
   return element;
 };
 
 // Очиащаем элемент
-var clearNodeChildren = function (element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
+var deleteNodeChildren = function (element) {
+  var parent = element.parentNode;
+  var newElement = element.cloneNode();
+
+  parent.replaceChild(newElement, element);
+
+  return newElement;
 };
 
 //
 var renderAdvertCardFeatures = function (array, container) {
   // Очищаем элемент
-  clearNodeChildren(container);
+  container = deleteNodeChildren(container);
 
   // Генерируем элементы для каждого удобства
   for (var i = 0; i < array.length; i++) {
@@ -231,7 +230,7 @@ var renderAdvertCardFeatures = function (array, container) {
 //
 var renderAdvertCardPhotos = function (array, container) {
   // Очищаем элемент
-  clearNodeChildren(container);
+  container = deleteNodeChildren(container);
 
   // Генерируем элементы для каждого удобства
   for (var i = 0; i < array.length; i++) {
@@ -273,7 +272,7 @@ var renderMapCard = function (data) {
   var element = template.cloneNode(true);
 
   // Записываем данные в элемент
-  element.querySelector('.popup__avatar').src = data.avatar;
+  element.querySelector('.popup__avatar').src = data.author.avatar;
   element.querySelector('h3').textContent = data.offer.title;
   element.querySelector('p small').textContent = data.offer.address;
   element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
