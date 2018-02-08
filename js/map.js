@@ -70,14 +70,15 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-// Минимальные и максимальные координаты
+// Минимальные и максимальные координаты геометок
 var LOCATION_X_MIN = 300;
 var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 150;
 var LOCATION_Y_MAX = 500;
 
-// Смещение по оси Y для рендера геоточек
+// Смещение по оси Y для рендера геометки
 var PIN_OFFSET = 35;
+var MAIN_PIN_OFFSET = 50;
 
 // Шаблоны
 var TEMPLATES = document.querySelector('template');
@@ -92,6 +93,7 @@ var TEMPLATES = document.querySelector('template');
 // Количество объявлений
 var map = document.querySelector('.map');
 var form = document.querySelector('.notice__form');
+var mainPin = document.querySelector('.map__pin--main');
 
 // -------------
 
@@ -204,19 +206,6 @@ var generateRandomAdvert = function () {
   return advert;
 };
 
-// Генерируем элемент геоточки объявления
-var renderAdvertPin = function (data, template) {
-  // Создаем элемент из шаблона
-  var element = template.cloneNode(true);
-
-  // Записываем данные в элемент
-  element.style.left = data.location.x + 'px';
-  element.style.top = data.location.y - PIN_OFFSET + 'px';
-  element.querySelector('img').src = data.author.avatar;
-
-  return element;
-};
-
 // Очиащаем элемент
 var deleteNodeChildren = function (element) {
   var parent = element.parentNode;
@@ -258,7 +247,21 @@ var renderAdvertCardPhotos = function (array, container) {
   }
 };
 
-// Генерируем элемент списка геоточек
+// Генерируем элемент геометк объявления
+var renderAdvertPin = function (data, id, template) {
+  // Создаем элемент из шаблона
+  var element = template.cloneNode(true);
+
+  // Записываем данные в элемент
+  element.style.left = data.location.x + 'px';
+  element.style.top = data.location.y - PIN_OFFSET + 'px';
+  element.querySelector('img').src = data.author.avatar;
+  element.id = 'pin' + id;
+
+  return element;
+};
+
+// Генерируем элемент списка геометок
 var renderAdvertsPins = function (array) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__pin');
@@ -268,7 +271,7 @@ var renderAdvertsPins = function (array) {
 
   // Генерируем элемент для каждого объявления и добавляем его во фрагмент
   for (var i = 0; i < array.length; i++) {
-    var element = renderAdvertPin(array[i], template);
+    var element = renderAdvertPin(array[i], i, template);
     fragment.appendChild(element);
   }
 
@@ -276,7 +279,7 @@ var renderAdvertsPins = function (array) {
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
-// Генерируем элемент списка геоточек
+// Генерируем элемент списка геометок
 var renderMapCard = function (data) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__card');
@@ -315,6 +318,28 @@ var setPageStateActive = function () {
   }
 };
 
+// Получаем координаты главной геометки
+var getMainPinCoords = function () {
+  var x = mainPin.offsetLeft;
+  var y = mainPin.offsetTop + MAIN_PIN_OFFSET;
+
+  return '{{' + x + '}}, {{' + y + '}}';
+};
+
+// Обработчик нажатия на главную геометку
+var onMainPinMouseUp = function () {
+  setPageStateActive();
+
+  setAddress();
+
+  renderAdvertsPins(adverts);
+};
+
+// Вносим позицию главной геометки в поле Адрес
+var setAddress = function () {
+  form.querySelector('#address').value = getMainPinCoords();
+};
+
 // -------------
 
 
@@ -322,20 +347,13 @@ var setPageStateActive = function () {
 // Задачи
 // -------------
 
+// Задаем первоначальный адрес
+setAddress();
+
 // Генерируем массив случайных объявлений
-// var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
-
-// Показываем карту
-// document.querySelector('.map').classList.remove('map--faded');
-
-// Отрисовываем геоточки объявлений на карту
-// renderAdvertsPins(adverts);
-
-// Отрисовываем карточку первого элемента массива объявлений
-// renderMapCard(adverts[0]);
-
+var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
 
 // Переводим страницу в активный режим при клике на главной геометке
-document.querySelector('.map__pin--main').addEventListener('mouseup', function () {
-  setPageStateActive();
+mainPin.addEventListener('mouseup', function () {
+  onMainPinMouseUp();
 });
