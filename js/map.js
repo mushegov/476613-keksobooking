@@ -301,13 +301,13 @@ var renderMapCard = function (data) {
 // -------------
 
 // Массив случайных объявлений
-var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
+// var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
 
 // Показываем карту
-document.querySelector('.map').classList.remove('map--faded');
+// document.querySelector('.map').classList.remove('map--faded');
 
 // Отрисовываем геоточки объявлений на карту
-renderAdvertsPins(adverts);
+// renderAdvertsPins(adverts);
 
 // Отрисовываем карточку первого элемента массива объявлений
-renderMapCard(adverts[0]);
+// renderMapCard(adverts[0]);
