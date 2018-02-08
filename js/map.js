@@ -86,6 +86,17 @@ var TEMPLATES = document.querySelector('template');
 
 
 // -------------
+// ПЕРЕМЕННЫЕ
+// -------------
+
+// Количество объявлений
+var map = document.querySelector('.map');
+var form = document.querySelector('.notice__form');
+
+// -------------
+
+
+// -------------
 // ФУНКЦИИ
 // -------------
 
@@ -293,6 +304,17 @@ var renderMapCard = function (data) {
   document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
 };
 
+// Переводим страницу в активный режим
+var setPageStateActive = function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('notice__form--disabled');
+
+  var fieldsets = form.querySelectorAll('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+};
+
 // -------------
 
 
@@ -300,7 +322,7 @@ var renderMapCard = function (data) {
 // Задачи
 // -------------
 
-// Массив случайных объявлений
+// Генерируем массив случайных объявлений
 // var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
 
 // Показываем карту
@@ -311,3 +333,9 @@ var renderMapCard = function (data) {
 
 // Отрисовываем карточку первого элемента массива объявлений
 // renderMapCard(adverts[0]);
+
+
+// Переводим страницу в активный режим при клике на главной геометке
+document.querySelector('.map__pin--main').addEventListener('mouseup', function () {
+  setPageStateActive();
+});
