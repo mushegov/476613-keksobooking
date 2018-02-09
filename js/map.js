@@ -7,7 +7,7 @@
 // Количество объявлений
 var ADVERTS_AMOUNT = 8;
 
-//
+// Аватары
 var AVATARS = [
   'img/avatars/user01.png',
   'img/avatars/user02.png',
@@ -70,17 +70,31 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-// Минимальные и максимальные координаты
+// Минимальные и максимальные координаты геометок
 var LOCATION_X_MIN = 300;
 var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 150;
 var LOCATION_Y_MAX = 500;
 
-// Смещение по оси Y для рендера геоточек
+// Смещение по оси Y для рендера геометки
 var PIN_OFFSET = 35;
+var MAIN_PIN_OFFSET = 50;
 
 // Шаблоны
 var TEMPLATES = document.querySelector('template');
+
+// -------------
+
+
+// -------------
+// ПЕРЕМЕННЫЕ
+// -------------
+
+// Количество объявлений
+var body = document.querySelector('body');
+var map = document.querySelector('.map');
+var form = document.querySelector('.notice__form');
+var mainPin = document.querySelector('.map__pin--main');
 
 // -------------
 
@@ -112,21 +126,6 @@ var shuffleArray = function (array) {
   return newArray;
 };
 
-// Геренируем случайное целое число из промежутка min-max (включая min-max)
-var getRandomIntInclusive = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-// Получаем случайный ключ из объекта
-var getRandomProperty = function (obj) {
-  var keys = Object.keys(obj);
-
-  return keys[keys.length * Math.random() << 0];
-};
-
 // Получаем случайный элемент из массива
 var getRandomArrayElement = function (array, removeUsedElement) {
   var id = Math.floor(Math.random() * array.length);
@@ -151,59 +150,19 @@ var getRandomArrayElements = function (array, amount, removeUsedElement) {
   return newArray;
 };
 
-// Создаем массив случайных объявлений
-var generateAdvertsArray = function (amount) {
-  var array = [];
+// Геренируем случайное целое число из промежутка min-max (включая min-max)
+var getRandomIntInclusive = function (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
 
-  for (var i = 0; i < amount; i++) {
-    var advert = generateRandomAdvert();
-    array.push(advert);
-  }
-
-  return array;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Создаем случайное объявление
-var generateRandomAdvert = function () {
-  var location = {
-    'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
-    'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
-  };
+// Получаем случайный ключ из объекта
+var getRandomProperty = function (obj) {
+  var keys = Object.keys(obj);
 
-  var advert = {
-    'author': {
-      'avatar': getRandomArrayElement(AVATARS, true)
-    },
-    'offer': {
-      'title': getRandomArrayElement(TITLES, true),
-      'address': '{{' + location.x + '}}, {{' + location.y + '}}',
-      'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
-      'type': getRandomProperty(TYPES),
-      'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
-      'guests': getRandomIntInclusive(1, 15),
-      'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-      'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-      'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
-      'description': '',
-      'photos': shuffleArray(PHOTOS)
-    },
-    'location': location
-  };
-
-  return advert;
-};
-
-// Генерируем элемент геоточки объявления
-var renderAdvertPin = function (data, template) {
-  // Создаем элемент из шаблона
-  var element = template.cloneNode(true);
-
-  // Записываем данные в элемент
-  element.style.left = data.location.x + 'px';
-  element.style.top = data.location.y - PIN_OFFSET + 'px';
-  element.querySelector('img').src = data.author.avatar;
-
-  return element;
+  return keys[keys.length * Math.random() << 0];
 };
 
 // Очиащаем элемент
@@ -216,39 +175,46 @@ var deleteNodeChildren = function (element) {
   return newElement;
 };
 
-// Отрисовываем удобства на карточку объявления
-var renderAdvertCardFeatures = function (array, container) {
-  // Очищаем элемент
-  container = deleteNodeChildren(container);
+// -------------
 
-  // Генерируем элементы для каждого удобства
-  for (var i = 0; i < array.length; i++) {
-    var item = document.createElement('li');
-    item.classList.add('feature', 'feature--' + array[i]);
-    container.appendChild(item);
+// Создаем массив случайных объявлений
+var generateRandomAdverts = function (amount) {
+  var array = [];
+
+  for (var i = 0; i < amount; i++) {
+    var location = {
+      'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+      'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+    };
+
+    var advert = {
+      'author': {
+        'avatar': getRandomArrayElement(AVATARS, true)
+      },
+      'offer': {
+        'title': getRandomArrayElement(TITLES, true),
+        'address': '{{' + location.x + '}}, {{' + location.y + '}}',
+        'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+        'type': getRandomProperty(TYPES),
+        'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+        'guests': getRandomIntInclusive(1, 15),
+        'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+        'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+        'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
+        'description': '',
+        'photos': shuffleArray(PHOTOS)
+      },
+      'location': location
+    };
+
+    array.push(advert);
   }
+
+  return array;
 };
 
-// Отрисовываем фотографии на карточку объявления
-var renderAdvertCardPhotos = function (array, container) {
-  // Очищаем элемент
-  container = deleteNodeChildren(container);
-
-  // Генерируем элементы для каждого удобства
-  for (var i = 0; i < array.length; i++) {
-    var item = document.createElement('li');
-    var image = document.createElement('img');
-
-    image.src = array[i];
-    image.width = 210;
-
-    item.appendChild(image);
-    container.appendChild(item);
-  }
-};
-
-// Генерируем элемент списка геоточек
-var renderAdvertsPins = function (array) {
+// Отрисовываем геометки
+var renderMapPins = function (array) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__pin');
 
@@ -257,7 +223,13 @@ var renderAdvertsPins = function (array) {
 
   // Генерируем элемент для каждого объявления и добавляем его во фрагмент
   for (var i = 0; i < array.length; i++) {
-    var element = renderAdvertPin(array[i], template);
+    var element = template.cloneNode(true);
+
+    element.style.left = array[i].location.x + 'px';
+    element.style.top = array[i].location.y - PIN_OFFSET + 'px';
+    element.querySelector('img').src = array[i].author.avatar;
+    element.setAttribute('data-pin', i);
+
     fragment.appendChild(element);
   }
 
@@ -265,15 +237,15 @@ var renderAdvertsPins = function (array) {
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
-// Генерируем элемент списка геоточек
-var renderMapCard = function (data) {
+// Отрисовываем элемент карточку предложени
+var renderAdvertCard = function (data) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__card');
 
   // Создаем элемент из шаблона
   var element = template.cloneNode(true);
 
-  // Записываем данные в элемент
+  // Записываем данные
   element.querySelector('.popup__avatar').src = data.author.avatar;
   element.querySelector('h3').textContent = data.offer.title;
   element.querySelector('p small').textContent = data.offer.address;
@@ -284,13 +256,95 @@ var renderMapCard = function (data) {
   element.querySelector('.popup__features + p').textContent = data.offer.description;
 
   // Отрисовываем удобства
-  renderAdvertCardFeatures(data.offer.features, element.querySelector('.popup__features'));
+  // Очищаем элемент
+  deleteNodeChildren(element.querySelector('.popup__features'));
+
+  // Генерируем элементы для каждого удобства
+  for (var i = 0; i < data.offer.features.length; i++) {
+    var featuresItem = document.createElement('li');
+    featuresItem.classList.add('feature', 'feature--' + data.offer.features[i]);
+    element.querySelector('.popup__features').appendChild(featuresItem);
+  }
 
   // Отрисовываем фото
-  renderAdvertCardPhotos(data.offer.photos, element.querySelector('.popup__pictures'));
+  deleteNodeChildren(element.querySelector('.popup__pictures'));
+
+  // Фото
+  for (var j = 0; j < data.offer.photos.length; j++) {
+    var photoItem = document.createElement('li');
+    var image = document.createElement('img');
+
+    image.src = data.offer.photos[j];
+    image.width = 210;
+
+    photoItem.appendChild(image);
+    element.querySelector('.popup__pictures').appendChild(photoItem);
+  }
 
   // Вставляем готовый фрагмент в DOM
   document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
+};
+
+// -------------
+
+// Переводим страницу в активный режим
+var setPageStateActive = function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('notice__form--disabled');
+  body.classList.add('active');
+
+  var fieldsets = form.querySelectorAll('fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+
+  // Обработчик нажатия на карту
+  map.addEventListener('click', onMapClick);
+
+  // Отрисовываем элемент списка геометок
+  renderMapPins(adverts);
+};
+
+// Получаем координаты главной геометки
+var getMainPinCoords = function (isInitial) {
+  var x = mainPin.offsetLeft;
+  var y = isInitial ? mainPin.offsetTop : mainPin.offsetTop + MAIN_PIN_OFFSET;
+
+  return '{{' + x + '}}, {{' + y + '}}';
+};
+
+// Вносим позицию главной геометки в поле Адрес
+var setAddress = function (isInitial) {
+  form.querySelector('#address').value = getMainPinCoords(isInitial);
+};
+
+// Обработчик нажатия на главную геометку
+var onMainPinMouseUp = function () {
+  // Переводим страницу в активный режим, если он неактивный
+  if (!body.classList.contains('active')) {
+    setPageStateActive();
+  }
+
+  // Устанавливаем новый адрес
+  setAddress(false);
+};
+
+// Обработчик нажатия на карту
+var onMapClick = function (evt) {
+  var target = evt.target;
+  var id;
+
+  if (target.parentNode.className === 'map__pin') {
+    id = target.offsetParent.getAttribute('data-pin');
+  }
+
+  if (target.className === 'map__pin') {
+    id = target.getAttribute('data-pin');
+  }
+
+  if (id) {
+    renderAdvertCard(adverts[id]);
+  }
 };
 
 // -------------
@@ -300,14 +354,11 @@ var renderMapCard = function (data) {
 // Задачи
 // -------------
 
-// Массив случайных объявлений
-var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
+// Задаем первоначальный адрес
+setAddress(true);
 
-// Показываем карту
-document.querySelector('.map').classList.remove('map--faded');
+// Генерируем массив случайных объявлений
+var adverts = generateRandomAdverts(ADVERTS_AMOUNT);
 
-// Отрисовываем геоточки объявлений на карту
-renderAdvertsPins(adverts);
-
-// Отрисовываем карточку первого элемента массива объявлений
-renderMapCard(adverts[0]);
+// Переводим страницу в активный режим при клике на главной геометке
+mainPin.addEventListener('mouseup', onMainPinMouseUp);
