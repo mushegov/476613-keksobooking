@@ -126,21 +126,6 @@ var shuffleArray = function (array) {
   return newArray;
 };
 
-// Геренируем случайное целое число из промежутка min-max (включая min-max)
-var getRandomIntInclusive = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-// Получаем случайный ключ из объекта
-var getRandomProperty = function (obj) {
-  var keys = Object.keys(obj);
-
-  return keys[keys.length * Math.random() << 0];
-};
-
 // Получаем случайный элемент из массива
 var getRandomArrayElement = function (array, removeUsedElement) {
   var id = Math.floor(Math.random() * array.length);
@@ -165,6 +150,21 @@ var getRandomArrayElements = function (array, amount, removeUsedElement) {
   return newArray;
 };
 
+// Геренируем случайное целое число из промежутка min-max (включая min-max)
+var getRandomIntInclusive = function (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// Получаем случайный ключ из объекта
+var getRandomProperty = function (obj) {
+  var keys = Object.keys(obj);
+
+  return keys[keys.length * Math.random() << 0];
+};
+
 // Очиащаем элемент
 var deleteNodeChildren = function (element) {
   var parent = element.parentNode;
@@ -178,7 +178,7 @@ var deleteNodeChildren = function (element) {
 // -------------
 
 // Создаем массив случайных объявлений
-var generateAdvertsArray = function (amount) {
+var generateRandomAdverts = function (amount) {
   var array = [];
 
   for (var i = 0; i < amount; i++) {
@@ -213,8 +213,8 @@ var generateAdvertsArray = function (amount) {
   return array;
 };
 
-// Генерируем элемент списка геометок
-var renderAdvertsPins = function (array) {
+// Отрисовываем геометки
+var renderMapPins = function (array) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__pin');
 
@@ -237,7 +237,7 @@ var renderAdvertsPins = function (array) {
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
-// Отрисовываем элемент списка геометок
+// Отрисовываем элемент карточку предложени
 var renderAdvertCard = function (data) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__card');
@@ -302,7 +302,7 @@ var setPageStateActive = function () {
   map.addEventListener('click', onMapClick);
 
   // Отрисовываем элемент списка геометок
-  renderAdvertsPins(adverts);
+  renderMapPins(adverts);
 };
 
 // Получаем координаты главной геометки
@@ -358,7 +358,7 @@ var onMapClick = function (evt) {
 setAddress(true);
 
 // Генерируем массив случайных объявлений
-var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
+var adverts = generateRandomAdverts(ADVERTS_AMOUNT);
 
 // Переводим страницу в активный режим при клике на главной геометке
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
