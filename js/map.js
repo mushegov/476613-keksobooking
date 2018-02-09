@@ -355,7 +355,7 @@ var onMapClick = function (evt) {
   var target = evt.target;
   var id;
 
-  if (target.offsetParent.className === 'map__pin') {
+  if (target.parentNode.className === 'map__pin') {
     id = target.offsetParent.getAttribute('data-pin');
   }
 
