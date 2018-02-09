@@ -7,7 +7,7 @@
 // Количество объявлений
 var ADVERTS_AMOUNT = 8;
 
-//
+// Аватары
 var AVATARS = [
   'img/avatars/user01.png',
   'img/avatars/user02.png',
@@ -91,6 +91,7 @@ var TEMPLATES = document.querySelector('template');
 // -------------
 
 // Количество объявлений
+var body = document.querySelector('body');
 var map = document.querySelector('.map');
 var form = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
@@ -256,7 +257,7 @@ var renderAdvertPin = function (data, id, template) {
   element.style.left = data.location.x + 'px';
   element.style.top = data.location.y - PIN_OFFSET + 'px';
   element.querySelector('img').src = data.author.avatar;
-  element.id = 'pin' + id;
+  element.setAttribute('data-pin', id);
 
   return element;
 };
@@ -279,7 +280,7 @@ var renderAdvertsPins = function (array) {
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
-// Генерируем элемент списка геометок
+// Отрисовываем элемент списка геометок
 var renderMapCard = function (data) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__card');
@@ -311,33 +312,60 @@ var renderMapCard = function (data) {
 var setPageStateActive = function () {
   map.classList.remove('map--faded');
   form.classList.remove('notice__form--disabled');
+  body.classList.add('active');
 
   var fieldsets = form.querySelectorAll('fieldset');
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].disabled = false;
   }
+
+  // Обработчик нажатия на карту
+  map.addEventListener('click', onMapClick);
 };
 
 // Получаем координаты главной геометки
-var getMainPinCoords = function () {
+var getMainPinCoords = function (isInitial) {
   var x = mainPin.offsetLeft;
-  var y = mainPin.offsetTop + MAIN_PIN_OFFSET;
+  var y = isInitial ? mainPin.offsetTop : mainPin.offsetTop + MAIN_PIN_OFFSET;
 
   return '{{' + x + '}}, {{' + y + '}}';
 };
 
+// Вносим позицию главной геометки в поле Адрес
+var setAddress = function (isInitial) {
+  form.querySelector('#address').value = getMainPinCoords(isInitial);
+};
+
 // Обработчик нажатия на главную геометку
 var onMainPinMouseUp = function () {
-  setPageStateActive();
+  // Переводим страницу в активный режим, если он неактивный
+  if (!body.classList.contains('active')) {
+    setPageStateActive();
+  }
 
-  setAddress();
+  // Устанавливаем новый адрес
+  setAddress(false);
 
+  // Отрисовываем элемент списка геометок
   renderAdvertsPins(adverts);
 };
 
-// Вносим позицию главной геометки в поле Адрес
-var setAddress = function () {
-  form.querySelector('#address').value = getMainPinCoords();
+// Обработчик нажатия на карту
+var onMapClick = function (evt) {
+  var target = evt.target;
+  var id;
+
+  if (target.offsetParent.className === 'map__pin') {
+    id = target.offsetParent.getAttribute('data-pin');
+  }
+
+  if (target.className === 'map__pin') {
+    id = target.getAttribute('data-pin');
+  }
+
+  if (id) {
+    renderMapCard(adverts[id]);
+  }
 };
 
 // -------------
@@ -348,12 +376,10 @@ var setAddress = function () {
 // -------------
 
 // Задаем первоначальный адрес
-setAddress();
+setAddress(true);
 
 // Генерируем массив случайных объявлений
 var adverts = generateAdvertsArray(ADVERTS_AMOUNT);
 
 // Переводим страницу в активный режим при клике на главной геометке
-mainPin.addEventListener('mouseup', function () {
-  onMainPinMouseUp();
-});
+mainPin.addEventListener('mouseup', onMainPinMouseUp);
