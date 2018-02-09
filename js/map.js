@@ -321,6 +321,9 @@ var setPageStateActive = function () {
 
   // Обработчик нажатия на карту
   map.addEventListener('click', onMapClick);
+
+  // Отрисовываем элемент списка геометок
+  renderAdvertsPins(adverts);
 };
 
 // Получаем координаты главной геометки
@@ -345,9 +348,6 @@ var onMainPinMouseUp = function () {
 
   // Устанавливаем новый адрес
   setAddress(false);
-
-  // Отрисовываем элемент списка геометок
-  renderAdvertsPins(adverts);
 };
 
 // Обработчик нажатия на карту
