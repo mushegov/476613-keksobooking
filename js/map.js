@@ -165,48 +165,6 @@ var getRandomArrayElements = function (array, amount, removeUsedElement) {
   return newArray;
 };
 
-// Создаем массив случайных объявлений
-var generateAdvertsArray = function (amount) {
-  var array = [];
-
-  for (var i = 0; i < amount; i++) {
-    var advert = generateRandomAdvert();
-    array.push(advert);
-  }
-
-  return array;
-};
-
-// Создаем случайное объявление
-var generateRandomAdvert = function () {
-  var location = {
-    'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
-    'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
-  };
-
-  var advert = {
-    'author': {
-      'avatar': getRandomArrayElement(AVATARS, true)
-    },
-    'offer': {
-      'title': getRandomArrayElement(TITLES, true),
-      'address': '{{' + location.x + '}}, {{' + location.y + '}}',
-      'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
-      'type': getRandomProperty(TYPES),
-      'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
-      'guests': getRandomIntInclusive(1, 15),
-      'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-      'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-      'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
-      'description': '',
-      'photos': shuffleArray(PHOTOS)
-    },
-    'location': location
-  };
-
-  return advert;
-};
-
 // Очиащаем элемент
 var deleteNodeChildren = function (element) {
   var parent = element.parentNode;
@@ -217,49 +175,42 @@ var deleteNodeChildren = function (element) {
   return newElement;
 };
 
-// Отрисовываем удобства на карточку объявления
-var renderAdvertCardFeatures = function (array, container) {
-  // Очищаем элемент
-  container = deleteNodeChildren(container);
+// -------------
 
-  // Генерируем элементы для каждого удобства
-  for (var i = 0; i < array.length; i++) {
-    var item = document.createElement('li');
-    item.classList.add('feature', 'feature--' + array[i]);
-    container.appendChild(item);
+// Создаем массив случайных объявлений
+var generateAdvertsArray = function (amount) {
+  var array = [];
+
+  for (var i = 0; i < amount; i++) {
+    var location = {
+      'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+      'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+    };
+
+    var advert = {
+      'author': {
+        'avatar': getRandomArrayElement(AVATARS, true)
+      },
+      'offer': {
+        'title': getRandomArrayElement(TITLES, true),
+        'address': '{{' + location.x + '}}, {{' + location.y + '}}',
+        'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+        'type': getRandomProperty(TYPES),
+        'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+        'guests': getRandomIntInclusive(1, 15),
+        'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+        'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+        'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
+        'description': '',
+        'photos': shuffleArray(PHOTOS)
+      },
+      'location': location
+    };
+
+    array.push(advert);
   }
-};
 
-// Отрисовываем фотографии на карточку объявления
-var renderAdvertCardPhotos = function (array, container) {
-  // Очищаем элемент
-  container = deleteNodeChildren(container);
-
-  // Генерируем элементы для каждого удобства
-  for (var i = 0; i < array.length; i++) {
-    var item = document.createElement('li');
-    var image = document.createElement('img');
-
-    image.src = array[i];
-    image.width = 210;
-
-    item.appendChild(image);
-    container.appendChild(item);
-  }
-};
-
-// Генерируем элемент геометк объявления
-var renderAdvertPin = function (data, id, template) {
-  // Создаем элемент из шаблона
-  var element = template.cloneNode(true);
-
-  // Записываем данные в элемент
-  element.style.left = data.location.x + 'px';
-  element.style.top = data.location.y - PIN_OFFSET + 'px';
-  element.querySelector('img').src = data.author.avatar;
-  element.setAttribute('data-pin', id);
-
-  return element;
+  return array;
 };
 
 // Генерируем элемент списка геометок
@@ -272,7 +223,13 @@ var renderAdvertsPins = function (array) {
 
   // Генерируем элемент для каждого объявления и добавляем его во фрагмент
   for (var i = 0; i < array.length; i++) {
-    var element = renderAdvertPin(array[i], i, template);
+    var element = template.cloneNode(true);
+
+    element.style.left = array[i].location.x + 'px';
+    element.style.top = array[i].location.y - PIN_OFFSET + 'px';
+    element.querySelector('img').src = array[i].author.avatar;
+    element.setAttribute('data-pin', i);
+
     fragment.appendChild(element);
   }
 
@@ -281,14 +238,14 @@ var renderAdvertsPins = function (array) {
 };
 
 // Отрисовываем элемент списка геометок
-var renderMapCard = function (data) {
+var renderAdvertCard = function (data) {
   // Создаем шаблон
   var template = TEMPLATES.content.querySelector('.map__card');
 
   // Создаем элемент из шаблона
   var element = template.cloneNode(true);
 
-  // Записываем данные в элемент
+  // Записываем данные
   element.querySelector('.popup__avatar').src = data.author.avatar;
   element.querySelector('h3').textContent = data.offer.title;
   element.querySelector('p small').textContent = data.offer.address;
@@ -299,14 +256,36 @@ var renderMapCard = function (data) {
   element.querySelector('.popup__features + p').textContent = data.offer.description;
 
   // Отрисовываем удобства
-  renderAdvertCardFeatures(data.offer.features, element.querySelector('.popup__features'));
+  // Очищаем элемент
+  deleteNodeChildren(element.querySelector('.popup__features'));
+
+  // Генерируем элементы для каждого удобства
+  for (var i = 0; i < data.offer.features.length; i++) {
+    var featuresItem = document.createElement('li');
+    featuresItem.classList.add('feature', 'feature--' + data.offer.features[i]);
+    element.querySelector('.popup__features').appendChild(featuresItem);
+  }
 
   // Отрисовываем фото
-  renderAdvertCardPhotos(data.offer.photos, element.querySelector('.popup__pictures'));
+  deleteNodeChildren(element.querySelector('.popup__pictures'));
+
+  // Фото
+  for (var j = 0; j < data.offer.photos.length; j++) {
+    var photoItem = document.createElement('li');
+    var image = document.createElement('img');
+
+    image.src = data.offer.photos[j];
+    image.width = 210;
+
+    photoItem.appendChild(image);
+    element.querySelector('.popup__pictures').appendChild(photoItem);
+  }
 
   // Вставляем готовый фрагмент в DOM
   document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
 };
+
+// -------------
 
 // Переводим страницу в активный режим
 var setPageStateActive = function () {
@@ -364,7 +343,7 @@ var onMapClick = function (evt) {
   }
 
   if (id) {
-    renderMapCard(adverts[id]);
+    renderAdvertCard(adverts[id]);
   }
 };
 
