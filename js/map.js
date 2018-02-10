@@ -362,3 +362,6 @@ var adverts = generateRandomAdverts(ADVERTS_AMOUNT);
 
 // Переводим страницу в активный режим при клике на главной геометке
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
+
+
+setPageStateActive();
