@@ -1,13 +1,5 @@
 'use strict';
 
-var form = document.querySelector('.notice__form');
-var typeInput = form.querySelector('#type');
-var priceInput = form.querySelector('#price');
-var timeInInput = form.querySelector('#timein');
-var timeOutInput = form.querySelector('#timeout');
-var roomNumberInput = form.querySelector('#room_number');
-var capacityInput = form.querySelector('#capacity');
-
 var MIN_PRICES = {
   'bungalo': 0,
   'flat': 1000,
@@ -21,6 +13,14 @@ var ROOMS_CAPACITY = {
   '3': [3, 2, 1],
   '100': [0]
 };
+
+var form = document.querySelector('.notice__form');
+var typeInput = form.querySelector('#type');
+var priceInput = form.querySelector('#price');
+var timeInInput = form.querySelector('#timein');
+var timeOutInput = form.querySelector('#timeout');
+var roomNumberInput = form.querySelector('#room_number');
+var capacityInput = form.querySelector('#capacity');
 
 //
 var onRoomNumberInputChange = function (evt) {
