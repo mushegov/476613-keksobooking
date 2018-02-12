@@ -1,9 +1,5 @@
 'use strict';
 (function () {
-  // -------------
-  // КОНСТАНТЫ
-  // -------------
-
   // Количество объявлений
   var ADVERTS_AMOUNT = 8;
 
@@ -83,26 +79,26 @@
 
     for (var i = 0; i < amount; i++) {
       var location = {
-        'x': getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
-        'y': getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+        'x': window.util.getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+        'y': window.util.getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
       };
 
       var advert = {
         'author': {
-          'avatar': getRandomArrayElement(AVATARS, true)
+          'avatar': window.util.getRandomArrayElement(AVATARS, true)
         },
         'offer': {
-          'title': getRandomArrayElement(TITLES, true),
+          'title': window.util.getRandomArrayElement(TITLES, true),
           'address': '{{' + location.x + '}}, {{' + location.y + '}}',
-          'price': getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
-          'type': getRandomProperty(TYPES),
-          'rooms': getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
-          'guests': getRandomIntInclusive(1, 15),
-          'checkin': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-          'checkout': getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
-          'features': getRandomArrayElements(shuffleArray(FEATURES), getRandomIntInclusive(0, FEATURES.length), true),
+          'price': window.util.getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+          'type': window.util.getRandomProperty(TYPES),
+          'rooms': window.util.getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+          'guests': window.util.getRandomIntInclusive(1, 15),
+          'checkin': window.util.getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+          'checkout': window.util.getRandomArrayElement(CHECKIN_CHECKOUT_TIME),
+          'features': window.util.getRandomArrayElements(window.util.shuffleArray(FEATURES), window.util.getRandomIntInclusive(0, FEATURES.length), true),
           'description': '',
-          'photos': shuffleArray(PHOTOS)
+          'photos': window.util.shuffleArray(PHOTOS)
         },
         'location': location
       };
@@ -113,5 +109,6 @@
     return array;
   };
 
+  // EXPORT
   window.data = generateRandomAdverts(ADVERTS_AMOUNT);
 })();

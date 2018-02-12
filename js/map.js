@@ -2,7 +2,6 @@
 
 (function () {
   // Смещение по оси Y для рендера геометки
-  var PIN_OFFSET = 35;
   var MAIN_PIN_OFFSET = 50;
 
   var body = document.querySelector('body');
@@ -25,7 +24,7 @@
     map.addEventListener('click', onMapClick);
 
     // Отрисовываем элемент списка геометок
-    renderMapPins(adverts);
+    window.pins(window.data);
   };
 
   // Получаем координаты главной геометки
@@ -66,17 +65,13 @@
     }
 
     if (id) {
-      renderAdvertCard(adverts[id]);
+      window.card(window.data[id]);
     }
   };
 
   // Задаем первоначальный адрес
   setAddress(true);
 
-  // Генерируем массив случайных объявлений
-  var adverts = generateRandomAdverts(ADVERTS_AMOUNT);
-
   // Переводим страницу в активный режим при клике на главной геометке
   mainPin.addEventListener('mouseup', onMainPinMouseUp);
-
 })();

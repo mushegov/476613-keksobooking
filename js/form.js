@@ -1,6 +1,6 @@
 'use strict';
-(function () {
 
+(function () {
   // КОНСТАНТЫ
   // Минимальные цены для разных типов жилья
   var MIN_PRICES = {

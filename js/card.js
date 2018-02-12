@@ -1,10 +1,18 @@
 'use strict';
 
 (function () {
+  // Типы обьявлений
+  var TYPES = {
+    'flat': 'Квартира',
+    'house': 'Бунгало',
+    'bungalo': 'Дом'
+  };
+
+
   // Отрисовываем элемент карточку предложени
   var renderAdvertCard = function (data) {
     // Создаем шаблон
-    var template = TEMPLATES.content.querySelector('.map__card');
+    var template = window.util.templates.card;
 
     // Создаем элемент из шаблона
     var element = template.cloneNode(true);
@@ -21,7 +29,7 @@
 
     // Отрисовываем удобства
     // Очищаем элемент
-    deleteNodeChildren(element.querySelector('.popup__features'));
+    window.util.deleteNodeChildren(element.querySelector('.popup__features'));
 
     // Генерируем элементы для каждого удобства
     for (var i = 0; i < data.offer.features.length; i++) {
@@ -31,7 +39,7 @@
     }
 
     // Отрисовываем фото
-    deleteNodeChildren(element.querySelector('.popup__pictures'));
+    window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
 
     // Фото
     for (var j = 0; j < data.offer.photos.length; j++) {
@@ -49,4 +57,6 @@
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
   };
 
+  // EXPORT
+  window.card = renderAdvertCard;
 })();

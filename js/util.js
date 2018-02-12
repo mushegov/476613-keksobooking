@@ -78,10 +78,14 @@
 
   // EXPORT
   window.util = {
-    templates: TEMPLATES,
+    templates: {
+      pin: TEMPLATES.content.querySelector('.map__pin'),
+      card: TEMPLATES.content.querySelector('.map__card'),
+    },
     shuffleArray: shuffleArray,
     getRandomArrayElement: getRandomArrayElement,
     getRandomArrayElements: getRandomArrayElements,
+    getRandomIntInclusive: getRandomIntInclusive,
     getRandomProperty: getRandomProperty,
     deleteNodeChildren: deleteNodeChildren
   };
