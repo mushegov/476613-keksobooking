@@ -22,12 +22,10 @@
     var id;
 
     if (target.parentNode.className === 'map__pin') {
-      id = target.offsetParent.getAttribute('data-pin');
+      target = evt.target.parentNode;
     }
 
-    if (target.className === 'map__pin') {
-      id = target.getAttribute('data-pin');
-    }
+    id = target.getAttribute('data-pin');
 
     if (id) {
       window.card(window.data[id]);
