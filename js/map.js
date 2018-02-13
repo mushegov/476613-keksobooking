@@ -33,7 +33,22 @@
   };
 
   //
-  var onMainPinMouseUp = function () {
+  var onMainPinMouseDown = function () {
+    console.log('down');
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  };
+
+  //
+  var onMouseMove = function () {
+    console.log('move');
+  };
+
+  //
+  var onMouseUp = function () {
+    console.log('up');
+
     // Переводим страницу в активный режим, если он неактивный
     if (!document.querySelector('body').classList.contains('active')) {
       window.util.setPageStateActive();
@@ -41,11 +56,15 @@
 
     // Устанавливаем новый адрес
     window.form.setAddress(false);
+
+    //
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
   };
 
 
   // Слушатели
-  mainPin.addEventListener('mouseup', onMainPinMouseUp);
+  mainPin.addEventListener('mousedown', onMainPinMouseDown);
 
 
   // EXPORT
