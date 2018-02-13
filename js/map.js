@@ -4,28 +4,9 @@
   // Смещение по оси Y для рендера геометки
   var MAIN_PIN_OFFSET = 50;
 
-  var body = document.querySelector('body');
-  var map = document.querySelector('.map');
-  var form = document.querySelector('.notice__form');
+  // Элементы
   var mainPin = document.querySelector('.map__pin--main');
 
-  // Переводим страницу в активный режим
-  var setPageStateActive = function () {
-    map.classList.remove('map--faded');
-    form.classList.remove('notice__form--disabled');
-    body.classList.add('active');
-
-    var fieldsets = form.querySelectorAll('fieldset');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = false;
-    }
-
-    // Обработчик нажатия на карту
-    map.addEventListener('click', onMapClick);
-
-    // Отрисовываем элемент списка геометок
-    window.pins(window.data);
-  };
 
   // Получаем координаты главной геометки
   var getMainPinCoords = function (isInitial) {
@@ -35,23 +16,7 @@
     return '{{' + x + '}}, {{' + y + '}}';
   };
 
-  // Вносим позицию главной геометки в поле Адрес
-  var setAddress = function (isInitial) {
-    form.querySelector('#address').value = getMainPinCoords(isInitial);
-  };
-
-  // Обработчик нажатия на главную геометку
-  var onMainPinMouseUp = function () {
-    // Переводим страницу в активный режим, если он неактивный
-    if (!body.classList.contains('active')) {
-      setPageStateActive();
-    }
-
-    // Устанавливаем новый адрес
-    setAddress(false);
-  };
-
-  // Обработчик нажатия на карту
+  //
   var onMapClick = function (evt) {
     var target = evt.target;
     var id;
@@ -69,9 +34,25 @@
     }
   };
 
-  // Задаем первоначальный адрес
-  setAddress(true);
+  //
+  var onMainPinMouseUp = function () {
+    // Переводим страницу в активный режим, если он неактивный
+    if (!document.querySelector('body').classList.contains('active')) {
+      window.util.setPageStateActive();
+    }
 
-  // Переводим страницу в активный режим при клике на главной геометке
+    // Устанавливаем новый адрес
+    window.form.setAddress(false);
+  };
+
+
+  // Слушатели
   mainPin.addEventListener('mouseup', onMainPinMouseUp);
+
+
+  // EXPORT
+  window.map = {
+    getMainPinCoords: getMainPinCoords,
+    onMapClick: onMapClick
+  };
 })();

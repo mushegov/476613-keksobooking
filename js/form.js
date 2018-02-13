@@ -18,7 +18,7 @@
     '100': [0]
   };
 
-  // Форма и поля
+  // Элементы
   var form = document.querySelector('.notice__form');
   var typeInput = form.querySelector('#type');
   var priceInput = form.querySelector('#price');
@@ -28,19 +28,28 @@
   var capacityInput = form.querySelector('#capacity');
 
 
+  // Вносим позицию главной геометки в поле Адрес
+  var setAddress = function (isInitial) {
+    form.querySelector('#address').value = window.map.getMainPinCoords(isInitial);
+  };
+
+
   // Обработчик
   var onRoomNumberInputChange = function (evt) {
     var value = evt.target.value;
     var capacity = ROOMS_CAPACITY[value];
     var options = capacityInput.querySelectorAll('option');
 
+    // Отключаем все опции
     for (var i = 0; i < options.length; i++) {
       capacityInput.querySelector('.capacity' + i).disabled = true;
       capacityInput.querySelector('.capacity' + i).selected = false;
     }
 
+    // Первое подходящее значение помечаем как выделенное
     capacityInput.querySelector('.capacity' + capacity[0]).selected = true;
 
+    // Включаем только подходящие опции
     for (i = 0; i < capacity.length; i++) {
       capacityInput.querySelector('.capacity' + capacity[i]).disabled = false;
     }
@@ -72,4 +81,9 @@
   //
   roomNumberInput.addEventListener('change', onRoomNumberInputChange);
 
+
+  // EXPORT
+  window.form = {
+    setAddress: setAddress
+  };
 })();

@@ -6,13 +6,10 @@
 
   // Генерируем новый массив наполненный случайными неповторяющимися элементами из переданного массива
   var shuffleArray = function (array) {
-    // Объявляем новый массив в котором будет перемешанные значение из исходногом массива
     var newArray = [];
 
-    // Копируем исходный массив во временный массив
     var tempArray = array.slice(0);
 
-    // Цикл
     for (var i = tempArray.length - 1; i >= 0; i--) {
       // Генерируем случайный индекс массива
       var randomId = getRandomIntInclusive(0, tempArray.length - 1);
@@ -76,17 +73,36 @@
     return newElement;
   };
 
+  // Переводим страницу в активный режим
+  var setPageStateActive = function () {
+    document.querySelector('.map').classList.remove('map--faded');
+    document.querySelector('.notice__form').classList.remove('notice__form--disabled');
+    document.querySelector('body').classList.add('active');
+
+    var fieldsets = document.querySelector('.notice__form').querySelectorAll('fieldset');
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].disabled = false;
+    }
+
+    // Обработчик нажатия на карту
+    document.querySelector('.map').addEventListener('click', window.map.onMapClick);
+
+    // Отрисовываем элемент списка геометок
+    window.pins(window.data);
+  };
+
   // EXPORT
   window.util = {
     templates: {
       pin: TEMPLATES.content.querySelector('.map__pin'),
-      card: TEMPLATES.content.querySelector('.map__card'),
+      card: TEMPLATES.content.querySelector('.map__card')
     },
     shuffleArray: shuffleArray,
     getRandomArrayElement: getRandomArrayElement,
     getRandomArrayElements: getRandomArrayElements,
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomProperty: getRandomProperty,
-    deleteNodeChildren: deleteNodeChildren
+    deleteNodeChildren: deleteNodeChildren,
+    setPageStateActive: setPageStateActive
   };
 })();

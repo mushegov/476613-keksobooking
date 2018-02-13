@@ -1,15 +1,12 @@
 'use strict';
 
 (function () {
-  // Смещение по оси Y для рендера геометки
+  // Смещение геометки по оси Y
   var PIN_OFFSET = 35;
 
-  // Отрисовываем геометки
   var renderMapPins = function (array) {
-    // Создаем шаблон
     var template = window.util.templates.pin;
 
-    // Создаем фрагмент
     var fragment = document.createDocumentFragment();
 
     // Генерируем элемент для каждого объявления и добавляем его во фрагмент
@@ -24,7 +21,6 @@
       fragment.appendChild(element);
     }
 
-    // Вставляем готовый фрагмент в DOM
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
