@@ -58,10 +58,10 @@
 
   // Слушатели
   typeInput.addEventListener('change', function (evt) {
-    var value = evt.target.value;
+    var value = MIN_PRICES[evt.target.value];
 
-    priceInput.setAttribute('min', MIN_PRICES[value]);
-    priceInput.setAttribute('placeholder', MIN_PRICES[value]);
+    priceInput.setAttribute('min', value);
+    priceInput.setAttribute('placeholder', value);
   });
 
   //
