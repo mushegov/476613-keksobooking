@@ -30,8 +30,8 @@
     // Обработчик нажатия на карту
     document.querySelector('.map').removeEventListener('click', window.map.onMapClick);
 
-    // Отрисовываем элемент списка геометок
-    window.pins.hide();
+    // Удаляем геометки
+    window.pins.remove();
   };
 
 
