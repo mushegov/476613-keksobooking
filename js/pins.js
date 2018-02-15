@@ -24,6 +24,14 @@
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
+  var hideMapPins = function () {
+
+  };
+
+
   // EXPORT
-  window.pins = renderMapPins;
+  window.pins = {
+    render: renderMapPins,
+    hide: hideMapPins
+  };
 })();
