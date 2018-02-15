@@ -73,23 +73,6 @@
     return newElement;
   };
 
-  // Переводим страницу в активный режим
-  var setPageStateActive = function () {
-    document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.notice__form').classList.remove('notice__form--disabled');
-    document.querySelector('body').classList.add('active');
-
-    var fieldsets = document.querySelector('.notice__form').querySelectorAll('fieldset');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = false;
-    }
-
-    // Обработчик нажатия на карту
-    document.querySelector('.map').addEventListener('click', window.map.onMapClick);
-
-    // Отрисовываем элемент списка геометок
-    window.pins(window.data);
-  };
 
   // EXPORT
   window.util = {
@@ -102,7 +85,6 @@
     getRandomArrayElements: getRandomArrayElements,
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomProperty: getRandomProperty,
-    deleteNodeChildren: deleteNodeChildren,
-    setPageStateActive: setPageStateActive
+    deleteNodeChildren: deleteNodeChildren
   };
 })();
