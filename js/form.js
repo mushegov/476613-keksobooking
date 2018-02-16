@@ -34,17 +34,10 @@
     form.querySelector('#address').value = window.map.getMainPinCoords(isInitial);
   };
 
-  // Включаем поля формы
-  var enableForm = function () {
+  // Переключаем состояние формы
+  var switchFormState = function (boolean) {
     for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = false;
-    }
-  };
-
-  // Отключаем поля формы
-  var disableForm = function () {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = true;
+      fieldsets[i].disabled = !boolean;
     }
   };
 
@@ -105,7 +98,6 @@
   // EXPORT
   window.form = {
     setAddress: setAddress,
-    enable: enableForm,
-    disable: disableForm
+    switchState: switchFormState
   };
 })();

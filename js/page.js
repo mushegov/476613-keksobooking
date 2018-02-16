@@ -10,7 +10,7 @@
     document.querySelector('.notice__form').classList.remove('notice__form--disabled');
     state = 'active';
 
-    window.form.enable();
+    window.form.switchState(true);
 
     // Обработчик нажатия на карту
     document.querySelector('.map').addEventListener('click', window.map.onMapClick);
@@ -25,7 +25,7 @@
     document.querySelector('.notice__form').classList.add('notice__form--disabled');
     state = 'inactive';
 
-    window.form.disable();
+    window.form.switchState(false);
 
     // Обработчик нажатия на карту
     document.querySelector('.map').removeEventListener('click', window.map.onMapClick);
