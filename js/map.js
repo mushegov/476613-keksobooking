@@ -98,8 +98,8 @@
     //
     var onMouseUp = function () {
       // Переводим страницу в активный режим, если он неактивный
-      if (window.page.state === 'inactive') {
-        window.page.setStateActive();
+      if (!document.querySelector('body').classList.contains('active')) {
+        window.util.setPageStateActive();
       }
 
       // Устанавливаем новый адрес
