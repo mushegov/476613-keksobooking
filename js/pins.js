@@ -24,6 +24,19 @@
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
+  //
+  var removeMapPins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
+  };
+
+
   // EXPORT
-  window.pins = renderMapPins;
+  window.pins = {
+    render: renderMapPins,
+    remove: removeMapPins
+  };
 })();

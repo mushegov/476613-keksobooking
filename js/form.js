@@ -26,6 +26,7 @@
   var timeOutInput = form.querySelector('#timeout');
   var roomNumberInput = form.querySelector('#room_number');
   var capacityInput = form.querySelector('#capacity');
+  var fieldsets = form.querySelectorAll('fieldset');
 
 
   // Вносим позицию главной геометки в поле Адрес
@@ -33,6 +34,12 @@
     form.querySelector('#address').value = window.map.getMainPinCoords(isInitial);
   };
 
+  // Переключаем состояние формы
+  var switchFormState = function (boolean) {
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].disabled = !boolean;
+    }
+  };
 
   // Обработчик
   var onRoomNumberInputChange = function (evt) {
@@ -57,6 +64,7 @@
 
 
   // Слушатели
+  //
   typeInput.addEventListener('change', function (evt) {
     var value = MIN_PRICES[evt.target.value];
 
@@ -81,9 +89,15 @@
   //
   roomNumberInput.addEventListener('change', onRoomNumberInputChange);
 
+  //
+  form.addEventListener('reset', function () {
+    window.page.setStateInactive();
+  });
+
 
   // EXPORT
   window.form = {
-    setAddress: setAddress
+    setAddress: setAddress,
+    switchState: switchFormState
   };
 })();
