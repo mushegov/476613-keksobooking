@@ -35,10 +35,10 @@
   };
 
   // Переключаем состояние формы
-  var switchFormState = function (boolean) {
+  var switchFormState = function (state) {
     var value = false;
 
-    if (boolean !== 'active') {
+    if (state !== 'active') {
       value = true;
       form.reset();
     }
