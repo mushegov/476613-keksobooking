@@ -5,7 +5,8 @@
   var TYPES = {
     'flat': 'Квартира',
     'house': 'Бунгало',
-    'bungalo': 'Дом'
+    'bungalo': 'Дом',
+    'palace': 'Дворец'
   };
 
 
