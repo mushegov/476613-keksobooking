@@ -4,13 +4,20 @@
   // Смещение геометки по оси Y
   var PIN_OFFSET = 35;
 
+  // Максимальное количество геометок на карте
+  var MAX_PINS = 5;
+
+
+  // Отрисовываем геометки
   var renderMapPins = function (array) {
     var template = window.util.templates.pin;
 
     var fragment = document.createDocumentFragment();
 
+    var pinsAmount = array.length < MAX_PINS ? array.length : MAX_PINS;
+
     // Генерируем элемент для каждого объявления и добавляем его во фрагмент
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < pinsAmount; i++) {
       var element = template.cloneNode(true);
 
       element.style.left = array[i].location.x + 'px';
@@ -24,13 +31,13 @@
     document.querySelector('.map__pins').appendChild(fragment);
   };
 
-  //
+  // Убираем геометк
   var removeMapPins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].remove();
-    }
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
   };
 
 
