@@ -2,6 +2,9 @@
 
 (function () {
   //
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
+
   var form = document.querySelector('.map__filters');
 
   //
@@ -9,8 +12,6 @@
     var filteredData = window.backend.data;
     var formData = new FormData(form);
     var features = [];
-    var LOW_PRICE = 10000;
-    var HIGH_PRICE = 10000;
 
     //
     form.querySelectorAll('.map__filter-set input:checked').forEach(function (checkbox) {
@@ -76,10 +77,14 @@
     }
   });
 
+  //
+  var reset = function () {
+    form.reset();
+  };
+
 
   // EXPORT
   window.filter = {
-    apply: 'apply',
-    reset: 'reset'
+    reset: reset
   };
 })();
