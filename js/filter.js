@@ -9,6 +9,8 @@
     var filteredData = window.backend.data;
     var formData = new FormData(form);
     var features = [];
+    var LOW_PRICE = 10000;
+    var HIGH_PRICE = 10000;
 
     //
     form.querySelectorAll('.map__filter-set input:checked').forEach(function (checkbox) {
@@ -27,9 +29,9 @@
       filteredData = filteredData.filter(function (pin) {
         var price = 'middle';
 
-        if (pin.offer.price < 10000) {
+        if (pin.offer.price < LOW_PRICE) {
           price = 'low';
-        } else if (pin.offer.price > 50000) {
+        } else if (pin.offer.price > HIGH_PRICE) {
           price = 'high';
         }
 
@@ -52,13 +54,12 @@
     }
 
     //
-    if (features) {
+    if (features.length > 0) {
       features.forEach(function (feature) {
         filteredData = filteredData.filter(function (pin) {
           return pin.offer.features.includes(feature);
         });
       });
-
     }
 
     return filteredData;
