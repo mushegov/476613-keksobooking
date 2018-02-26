@@ -73,8 +73,6 @@
     if (!filteredData.length) {
       window.page.showError('Нет подходящих объявлений. Измените фильтр.', 2500);
     }
-
-    console.log(filteredData);
   });
 
 
