@@ -35,13 +35,14 @@
   };
 
   //
-  var showError = function (error) {
+  var showError = function (errorText, duration) {
+    duration = duration || 5000;
     var errorDiv = document.createElement('div');
     errorDiv.classList.add('error-message');
-    errorDiv.textContent = error;
+    errorDiv.textContent = errorText;
     document.querySelector('body').appendChild(errorDiv);
 
-    setTimeout(hideError, 3000);
+    setTimeout(hideError, duration);
   };
 
   //
