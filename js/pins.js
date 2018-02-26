@@ -10,6 +10,8 @@
 
   // Отрисовываем геометки
   var renderMapPins = function (array) {
+    removeMapPins();
+
     var template = window.util.templates.pin;
 
     var fragment = document.createDocumentFragment();
