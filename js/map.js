@@ -89,6 +89,7 @@
         y: mainPin.offsetTop - shift.y
       };
 
+      // Проверяем не заходит ли геометка за рамки
       newCoords = checkCoords(newCoords);
 
       mainPin.style.top = (newCoords.y) + 'px';
