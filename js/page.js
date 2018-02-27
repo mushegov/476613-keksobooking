@@ -31,7 +31,7 @@
     document.querySelector('.map').removeEventListener('click', window.map.onMapClick);
 
     // Удаляем геометки
-    window.pins.remove();
+    window.pins.hide();
 
     // Сбрасываем форму фильтра геометок
     window.filter.reset();

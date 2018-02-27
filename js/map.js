@@ -35,7 +35,7 @@
     id = target.getAttribute('data-pin');
 
     if (id) {
-      window.card(window.data[id]);
+      window.card.render(window.backend.data[id]);
     }
   };
 

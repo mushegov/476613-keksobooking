@@ -17,13 +17,13 @@
     var pinsArray = [];
 
     // Генерируем элемент для каждого объявления и добавляем его во фрагмент
-    for (var i = 0; i < array.length; i++) {
+    array.forEach(function (pin, i) {
       var element = template.cloneNode(true);
 
       element.style.display = 'none';
-      element.style.left = array[i].location.x + 'px';
-      element.style.top = array[i].location.y - PIN_OFFSET + 'px';
-      element.querySelector('img').src = array[i].author.avatar;
+      element.style.left = pin.location.x + 'px';
+      element.style.top = pin.location.y - PIN_OFFSET + 'px';
+      element.querySelector('img').src = pin.author.avatar;
       element.setAttribute('data-pin', i);
       element.setAttribute('id', 'pin' + i);
 
@@ -31,7 +31,7 @@
 
       array[i].id = i;
       pinsArray.push(i);
-    }
+    });
 
     document.querySelector('.map__pins').appendChild(fragment);
 
@@ -42,9 +42,9 @@
   var showPins = function (array) {
     hidePins();
 
-    array.forEach(function (item, i) {
+    array.forEach(function (id, i) {
       if (i < MAX_PINS) {
-        document.querySelector('#pin' + i).style.display = 'block';
+        document.querySelector('#pin' + id).style.display = 'block';
       }
     });
   };
