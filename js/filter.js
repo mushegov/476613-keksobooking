@@ -69,10 +69,15 @@
   //
   form.addEventListener('change', function () {
     var filteredData = filterData();
+    var filteredPinsId = [];
 
-    window.pins.render(filteredData);
+    filteredData.forEach(function (pin) {
+      filteredPinsId.push(pin.id);
+    });
 
-    if (!filteredData.length) {
+    window.pins.show(filteredPinsId);
+
+    if (!filteredPinsId.length) {
       window.page.showError('Нет подходящих объявлений. Измените фильтр.', 2500);
     }
   });
