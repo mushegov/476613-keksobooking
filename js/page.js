@@ -1,19 +1,20 @@
 'use strict';
 
 (function () {
-  // Состояние страницы
   var state = 'inactive';
+  var map = document.querySelector('.map');
+  var noticeForm = document.querySelector('.notice__form');
 
   // Переводим страницу в активный режим
   var setPageStateActive = function () {
-    document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.notice__form').classList.remove('notice__form--disabled');
+    map.classList.remove('map--faded');
+    noticeForm.classList.remove('notice__form--disabled');
     state = 'active';
 
     window.form.switchState('active');
 
     // Обработчик нажатия на карту
-    document.querySelector('.map').addEventListener('click', window.map.onMapClick);
+    map.addEventListener('click', window.map.onMapClick);
 
     // Отрисовываем элемент списка геометок
     window.backend.load(window.pins.render, showError);
@@ -21,14 +22,14 @@
 
   // Переводим страницу в неактивный режим
   var setPageStateInactive = function () {
-    document.querySelector('.map').classList.add('map--faded');
-    document.querySelector('.notice__form').classList.add('notice__form--disabled');
+    map.classList.add('map--faded');
+    noticeForm.classList.add('notice__form--disabled');
     state = 'inactive';
 
     window.form.switchState('inactive');
 
     // Обработчик нажатия на карту
-    document.querySelector('.map').removeEventListener('click', window.map.onMapClick);
+    map.removeEventListener('click', window.map.onMapClick);
 
     // Удаляем геометки
     window.pins.hide();
