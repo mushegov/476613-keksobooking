@@ -8,6 +8,17 @@
   var form = document.querySelector('.map__filters');
 
   //
+  var filterByNumber = function (formData, filteredData, attribute) {
+    if (formData.get('housing-' + attribute) !== 'any') {
+      filteredData = filteredData.filter(function (pin) {
+        return pin.offer[attribute] === parseInt(formData.get('housing-' + attribute), 10);
+      });
+    }
+
+    return filteredData;
+  };
+
+  //
   var filterData = function () {
     var filteredData = window.backend.data;
     var formData = new FormData(form);
@@ -40,19 +51,8 @@
       });
     }
 
-    //
-    if (formData.get('housing-rooms') !== 'any') {
-      filteredData = filteredData.filter(function (pin) {
-        return pin.offer.rooms === parseInt(formData.get('housing-rooms'), 10);
-      });
-    }
-
-    //
-    if (formData.get('housing-guests') !== 'any') {
-      filteredData = filteredData.filter(function (pin) {
-        return pin.offer.guests === parseInt(formData.get('housing-guests'), 10);
-      });
-    }
+    filteredData = filterByNumber(formData, filteredData, 'rooms');
+    filteredData = filterByNumber(formData, filteredData, 'guests');
 
     //
     if (features.length > 0) {
