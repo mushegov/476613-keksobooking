@@ -9,7 +9,8 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onLoad(xhr.response);
+        window.backend.data = xhr.response;
+        onLoad(window.backend.data);
       } else {
         onError('Ошибка! Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

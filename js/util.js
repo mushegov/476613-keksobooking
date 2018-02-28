@@ -4,6 +4,20 @@
   // Шаблоны
   var TEMPLATES = document.querySelector('template');
 
+  //
+  var DEBOUNCE_INTERVAL = 500; // ms
+
+  //
+  var lastTimeout;
+
+  //
+  var debounce = function (fun) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+  };
+
   // Генерируем новый массив наполненный случайными неповторяющимися элементами из переданного массива
   var shuffleArray = function (array) {
     var newArray = [];
@@ -85,6 +99,7 @@
     getRandomArrayElements: getRandomArrayElements,
     getRandomIntInclusive: getRandomIntInclusive,
     getRandomProperty: getRandomProperty,
-    deleteNodeChildren: deleteNodeChildren
+    deleteNodeChildren: deleteNodeChildren,
+    debounce: debounce
   };
 })();

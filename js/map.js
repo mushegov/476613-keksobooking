@@ -35,7 +35,7 @@
     id = target.getAttribute('data-pin');
 
     if (id) {
-      window.card(window.data[id]);
+      window.card.render(window.backend.data[id]);
     }
   };
 
@@ -89,6 +89,7 @@
         y: mainPin.offsetTop - shift.y
       };
 
+      // Проверяем не заходит ли геометка за рамки
       newCoords = checkCoords(newCoords);
 
       mainPin.style.top = (newCoords.y) + 'px';

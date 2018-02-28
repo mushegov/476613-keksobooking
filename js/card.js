@@ -11,7 +11,7 @@
 
 
   // Отрисовываем элемент карточку предложени
-  var renderAdvertCard = function (data) {
+  var renderCard = function (data) {
     // Создаем шаблон
     var template = window.util.templates.card;
 
@@ -59,5 +59,7 @@
   };
 
   // EXPORT
-  window.card = renderAdvertCard;
+  window.card = {
+    render: renderCard
+  };
 })();
