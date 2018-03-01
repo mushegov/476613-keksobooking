@@ -77,6 +77,8 @@
 
     window.pins.show(filteredPinsId);
 
+    window.card.hide();
+
     if (!filteredPinsId.length) {
       window.page.showError('Нет подходящих объявлений. Измените фильтр.', 2500);
     }
