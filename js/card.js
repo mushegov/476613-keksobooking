@@ -9,6 +9,8 @@
     'palace': 'Дворец'
   };
 
+  var PHOTO_HEIGHT = 30;
+
 
   // Отрисовываем элемент карточку предложени
   var renderCard = function (data) {
@@ -55,7 +57,7 @@
         var image = document.createElement('img');
 
         image.src = photo;
-        image.height = 30;
+        image.height = PHOTO_HEIGHT;
 
         photoItem.appendChild(image);
         element.querySelector('.popup__pictures').appendChild(photoItem);
