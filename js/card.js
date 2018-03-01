@@ -12,6 +12,9 @@
 
   // Отрисовываем элемент карточку предложени
   var renderCard = function (data) {
+    // Удаляем предыдущую карточку
+    closeCard();
+
     // Создаем шаблон
     var template = window.util.templates.card;
 
@@ -29,37 +32,51 @@
     element.querySelector('.popup__description').textContent = data.offer.description;
 
     // Отрисовываем удобства
-    // Очищаем элемент
-    window.util.deleteNodeChildren(element.querySelector('.popup__features'));
+    if (data.offer.features.length === 0) {
+      element.querySelector('.popup__features').remove();
+    } else {
+      window.util.deleteNodeChildren(element.querySelector('.popup__features'));
 
-    // Генерируем элементы для каждого удобства
-    for (var i = 0; i < data.offer.features.length; i++) {
-      var featuresItem = document.createElement('li');
-      featuresItem.classList.add('feature', 'feature--' + data.offer.features[i]);
-      element.querySelector('.popup__features').appendChild(featuresItem);
+      data.offer.features.forEach(function (feature) {
+        var featuresItem = document.createElement('li');
+        featuresItem.classList.add('feature', 'feature--' + feature);
+        element.querySelector('.popup__features').appendChild(featuresItem);
+      });
     }
 
     // Отрисовываем фото
-    window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
+    if (data.offer.photos.length === 0) {
+      element.querySelector('.popup__pictures').remove();
+    } else {
+      window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
 
-    // Фото
-    for (var j = 0; j < data.offer.photos.length; j++) {
-      var photoItem = document.createElement('li');
-      var image = document.createElement('img');
+      data.offer.photos.forEach(function (photo) {
+        var photoItem = document.createElement('li');
+        var image = document.createElement('img');
 
-      image.src = data.offer.photos[j];
-      image.width = 210;
+        image.src = photo;
+        image.height = 30;
 
-      photoItem.appendChild(image);
-      element.querySelector('.popup__pictures').appendChild(photoItem);
+        photoItem.appendChild(image);
+        element.querySelector('.popup__pictures').appendChild(photoItem);
+      });
     }
 
     // Вставляем готовый фрагмент в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
   };
 
+  //
+  var closeCard = function () {
+    if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
+  };
+
+
   // EXPORT
   window.card = {
-    render: renderCard
+    render: renderCard,
+    close: closeCard
   };
 })();
