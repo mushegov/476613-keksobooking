@@ -30,7 +30,7 @@
     window.filter.reset();
   };
 
-  //
+  // Показываем ошибку
   var showError = function (errorText, duration) {
     duration = duration || 5000;
     var errorDiv = document.createElement('div');
@@ -41,7 +41,7 @@
     setTimeout(hideError, duration);
   };
 
-  //
+  // Скрываем ошибку
   var hideError = function () {
     document.querySelector('.error-message').remove();
   };

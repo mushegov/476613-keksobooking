@@ -44,9 +44,9 @@
       // тут хочу устанавливать значение геометки
     }
 
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = value;
-    }
+    fieldsets.forEach(function (fieldset) {
+      fieldset.disabled = value;
+    });
   };
 
   // Обработчик
@@ -56,18 +56,18 @@
     var options = capacityInput.querySelectorAll('option');
 
     // Отключаем все опции
-    for (var i = 0; i < options.length; i++) {
+    options.forEach(function (item, i) {
       capacityInput.querySelector('.capacity' + i).disabled = true;
       capacityInput.querySelector('.capacity' + i).selected = false;
-    }
+    });
 
     // Первое подходящее значение помечаем как выделенное
     capacityInput.querySelector('.capacity' + capacity[0]).selected = true;
 
     // Включаем только подходящие опции
-    for (i = 0; i < capacity.length; i++) {
+    capacity.forEach(function (item, i) {
       capacityInput.querySelector('.capacity' + capacity[i]).disabled = false;
-    }
+    });
   };
 
 

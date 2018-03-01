@@ -9,7 +9,10 @@
     'palace': 'Дворец'
   };
 
+  // Размер фото
   var PHOTO_HEIGHT = 30;
+
+  // Код ESC
   var ESC_KEYCODE = 27;
 
 
@@ -34,10 +37,11 @@
     element.querySelector('.popup__checkin-checkout').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
     element.querySelector('.popup__description').textContent = data.offer.description;
 
-    // Отрисовываем удобства
+    // Удобства
     if (data.offer.features.length === 0) {
       element.querySelector('.popup__features').remove();
     } else {
+      // Очищаем элемент
       window.util.deleteNodeChildren(element.querySelector('.popup__features'));
 
       data.offer.features.forEach(function (feature) {
@@ -47,10 +51,11 @@
       });
     }
 
-    // Отрисовываем фото
+    // Фото
     if (data.offer.photos.length === 0) {
       element.querySelector('.popup__pictures').remove();
     } else {
+      // Очищаем элемент
       window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
 
       data.offer.photos.forEach(function (photo) {
@@ -71,23 +76,23 @@
     // Скрываем карточку через клавиатуру
     document.addEventListener('keydown', onKeypress);
 
-    // Вставляем готовый фрагмент в DOM
+    // Вставляем карточку в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
   };
 
-  //
+  // Обработчик нажатия на крестик
   var onPopupCloseClick = function () {
     closeCard();
   };
 
-  //
+  // Слушаем нажатие на ESC
   var onKeypress = function (evt) {
     if (document.querySelector('.map__card') && evt.keyCode === ESC_KEYCODE) {
       closeCard();
     }
   };
 
-  //
+  // Закрывам карточку
   var closeCard = function () {
     if (document.querySelector('.map__card')) {
       document.querySelector('.map__card .popup__close').removeEventListener('click', onPopupCloseClick);
