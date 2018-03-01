@@ -20,13 +20,13 @@
 
     // Записываем данные
     element.querySelector('.popup__avatar').src = data.author.avatar;
-    element.querySelector('h3').textContent = data.offer.title;
-    element.querySelector('p small').textContent = data.offer.address;
+    element.querySelector('.popup__title').textContent = data.offer.title;
+    element.querySelector('.popup__address').textContent = data.offer.address;
     element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
-    element.querySelector('h4').textContent = TYPES[data.offer.type];
-    element.querySelector('h4 + p').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
-    element.querySelector('h4 + p + p').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
-    element.querySelector('.popup__features + p').textContent = data.offer.description;
+    element.querySelector('.popup__type').textContent = TYPES[data.offer.type];
+    element.querySelector('.popup__guests-and-rooms').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+    element.querySelector('.popup__checkin-checkout').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    element.querySelector('.popup__description').textContent = data.offer.description;
 
     // Отрисовываем удобства
     // Очищаем элемент
