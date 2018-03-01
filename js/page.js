@@ -12,11 +12,7 @@
     state = 'active';
 
     window.form.switchState('active');
-
-    // Обработчик нажатия на карту
     map.addEventListener('click', window.map.onMapClick);
-
-    // Отрисовываем элемент списка геометок
     window.backend.load(window.pins.render, showError);
   };
 
@@ -27,14 +23,9 @@
     state = 'inactive';
 
     window.form.switchState('inactive');
-
-    // Обработчик нажатия на карту
     map.removeEventListener('click', window.map.onMapClick);
-
-    // Удаляем геометки
     window.pins.hide();
-
-    // Сбрасываем форму фильтра геометок
+    window.map.reset();
     window.filter.reset();
   };
 

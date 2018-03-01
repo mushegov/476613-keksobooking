@@ -30,8 +30,8 @@
 
 
   // Вносим позицию главной геометки в поле Адрес
-  var setAddress = function (isInitial) {
-    form.querySelector('#address').value = window.map.getMainPinCoords(isInitial);
+  var setAddress = function (coords) {
+    form.querySelector('#address').value = '{{' + coords.x + '}}, {{' + coords.y + '}}';
   };
 
   // Переключаем состояние формы
@@ -41,6 +41,7 @@
     if (state !== 'active') {
       value = true;
       form.reset();
+      // тут хочу устанавливать значение геометки
     }
 
     for (var i = 0; i < fieldsets.length; i++) {
