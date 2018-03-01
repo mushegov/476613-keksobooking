@@ -10,6 +10,7 @@
   };
 
   var PHOTO_HEIGHT = 30;
+  var ESC_KEYCODE = 27;
 
 
   // Отрисовываем элемент карточку предложени
@@ -64,13 +65,33 @@
       });
     }
 
+    // Слушаем нажатие на крестик
+    element.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
+
+    // Скрываем карточку через клавиатуру
+    document.addEventListener('keydown', onKeypress);
+
     // Вставляем готовый фрагмент в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
   };
 
   //
+  var onPopupCloseClick = function () {
+    closeCard();
+  };
+
+  //
+  var onKeypress = function (evt) {
+    if (document.querySelector('.map__card') && evt.keyCode === ESC_KEYCODE) {
+      closeCard();
+    }
+  };
+
+  //
   var closeCard = function () {
     if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card .popup__close').removeEventListener('click', onPopupCloseClick);
+      document.removeEventListener('keydown', onKeypress);
       document.querySelector('.map__card').remove();
     }
   };
@@ -79,6 +100,6 @@
   // EXPORT
   window.card = {
     render: renderCard,
-    close: closeCard
+    hide: closeCard
   };
 })();

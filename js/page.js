@@ -25,6 +25,7 @@
     window.form.switchState('inactive');
     map.removeEventListener('click', window.map.onMapClick);
     window.pins.hide();
+    window.card.hide();
     window.map.reset();
     window.filter.reset();
   };
