@@ -1,33 +1,36 @@
 'use strict';
 
 (function () {
-  var state = 'inactive';
+  window.state = 'inactive';
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
 
-  // Переводим страницу в активный режим
-  var setPageStateActive = function () {
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
-    state = 'active';
+  var switchPageState = function (state) {
+    switch (state) {
+      case 'inactive':
+        window.state = 'inactive';
 
-    window.form.switchState('active');
-    map.addEventListener('click', window.map.onMapClick);
-    window.backend.load(window.pins.render, showError);
-  };
+        map.classList.add('map--faded');
+        noticeForm.classList.add('notice__form--disabled');
+        window.form.state(window.state);
+        window.filter.state(window.state);
+        window.pins.hide();
+        window.card.hide();
+        window.map.reset();
 
-  // Переводим страницу в неактивный режим
-  var setPageStateInactive = function () {
-    map.classList.add('map--faded');
-    noticeForm.classList.add('notice__form--disabled');
-    state = 'inactive';
+        map.removeEventListener('click', window.map.onMapClick);
 
-    window.form.switchState('inactive');
-    map.removeEventListener('click', window.map.onMapClick);
-    window.pins.hide();
-    window.card.hide();
-    window.map.reset();
-    window.filter.state('inactive');
+        break;
+      default:
+        window.state = 'active';
+
+        map.classList.remove('map--faded');
+        noticeForm.classList.remove('notice__form--disabled');
+        window.form.state(window.state);
+        window.backend.load(window.pins.render, showError);
+
+        map.addEventListener('click', window.map.onMapClick);
+    }
   };
 
   // Показываем ошибку
@@ -49,9 +52,7 @@
 
   // EXPORT
   window.page = {
-    state: state,
-    setStateActive: setPageStateActive,
-    setStateInactive: setPageStateInactive,
+    state: switchPageState,
     showError: showError
   };
 })();
