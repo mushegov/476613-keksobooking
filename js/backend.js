@@ -9,8 +9,13 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
+        // Получаем данные
         window.backend.data = xhr.response;
+
+        // Передаем данные
         onLoad(window.backend.data);
+
+        // Включаем фильтр геометок
         window.filter.state('active');
       } else {
         onError('Ошибка! Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -25,7 +30,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = 10000;
 
     xhr.open('GET', 'https://js.dump.academy/keksobooking/data');
     xhr.send();
@@ -51,7 +56,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = 10000;
 
     xhr.open('POST', 'https://js.dump.academy/keksobooking');
     xhr.send(data);

@@ -33,9 +33,8 @@
   var setAddress = function (coords) {
     form.querySelector('#address').value = '{{' + coords.x + '}}, {{' + coords.y + '}}';
   };
-
   // Устанавливаем первоначальные координаты
-  setAddress(window.map.getMainPinCoords());
+  setAddress(window.map.mainPinInitialCoords);
 
   // Переключаем состояние формы
   var switchFormState = function (state) {

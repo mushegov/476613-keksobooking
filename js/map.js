@@ -24,7 +24,6 @@
 
     return coords;
   };
-
   mainPinInitialCoords = getMainPinCoords();
 
   // Устанавливаем главной метке изначальные координаты

@@ -77,21 +77,22 @@
     // Слушаем нажатие на крестик
     element.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
 
-    // Скрываем карточку через клавиатуру
+    // Слушаем нажатие на ESC
     document.addEventListener('keydown', onKeypress);
 
     // Вставляем карточку в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
 
+    // Передаем карточку выше
     card = document.querySelector('.map__card');
   };
 
-  // Обработчик нажатия на крестик
+  // Скрываем карточку при нажатии на крестик
   var onPopupCloseClick = function () {
     closeCard();
   };
 
-  // Слушаем нажатие на ESC
+  // Скрываем карточку при нажатии ESC
   var onKeypress = function (evt) {
     if (card && evt.keyCode === ESC_KEYCODE) {
       closeCard();

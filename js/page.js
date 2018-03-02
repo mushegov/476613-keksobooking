@@ -5,6 +5,7 @@
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
 
+  // Переключаем состояние страницы
   var switchPageState = function (state) {
     switch (state) {
       case 'inactive':
