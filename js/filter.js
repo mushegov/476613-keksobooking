@@ -8,10 +8,12 @@
   var form = document.querySelector('.map__filters');
 
   // Фильтруем по числу
-  var filterByNumber = function (formData, filteredData, attribute) {
-    if (formData.get('housing-' + attribute) !== 'any') {
+  var filterByNumber = function (formData, filteredData, attr) {
+    var value = formData.get('housing-' + attr);
+
+    if (value !== 'any') {
       filteredData = filteredData.filter(function (pin) {
-        return pin.offer[attribute] === parseInt(formData.get('housing-' + attribute), 10);
+        return pin.offer[attr] === parseInt(value, 10);
       });
     }
 
