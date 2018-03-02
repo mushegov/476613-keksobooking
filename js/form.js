@@ -38,16 +38,16 @@
 
   // Переключаем состояние формы
   var switchFormState = function (state) {
-    var value = false;
+    var isDisabled = false;
 
     if (state !== 'active') {
-      value = true;
+      isDisabled = true;
       form.reset();
       setAddress(window.map.mainPinInitialCoords);
     }
 
     fieldsets.forEach(function (fieldset) {
-      fieldset.disabled = value;
+      fieldset.disabled = isDisabled;
     });
   };
 
