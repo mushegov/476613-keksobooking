@@ -21,6 +21,8 @@
 
         map.removeEventListener('click', window.map.onMapClick);
 
+        window.scrollTo(0, 0);
+
         break;
       default:
         window.state = 'active';
