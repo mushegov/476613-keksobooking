@@ -15,6 +15,9 @@
   // Код ESC
   var ESC_KEYCODE = 27;
 
+  // Сюда запишем элемент карточки
+  var card;
+
 
   // Отрисовываем элемент карточку предложени
   var renderCard = function (data) {
@@ -23,9 +26,10 @@
 
     // Создаем шаблон
     var template = window.util.templates.card;
-
-    // Создаем элемент из шаблона
     var element = template.cloneNode(true);
+    var featuresElement = element.querySelector('.popup__features');
+    var photosElement = element.querySelector('.popup__pictures');
+
 
     // Записываем данные
     element.querySelector('.popup__avatar').src = data.author.avatar;
@@ -39,24 +43,24 @@
 
     // Удобства
     if (data.offer.features.length === 0) {
-      element.querySelector('.popup__features').remove();
+      featuresElement.remove();
     } else {
       // Очищаем элемент
-      window.util.deleteNodeChildren(element.querySelector('.popup__features'));
+      featuresElement = window.util.deleteNodeChildren(featuresElement);
 
       data.offer.features.forEach(function (feature) {
         var featuresItem = document.createElement('li');
         featuresItem.classList.add('feature', 'feature--' + feature);
-        element.querySelector('.popup__features').appendChild(featuresItem);
+        featuresElement.appendChild(featuresItem);
       });
     }
 
     // Фото
     if (data.offer.photos.length === 0) {
-      element.querySelector('.popup__pictures').remove();
+      photosElement.remove();
     } else {
       // Очищаем элемент
-      window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
+      photosElement = window.util.deleteNodeChildren(photosElement);
 
       data.offer.photos.forEach(function (photo) {
         var photoItem = document.createElement('li');
@@ -66,7 +70,7 @@
         image.height = PHOTO_HEIGHT;
 
         photoItem.appendChild(image);
-        element.querySelector('.popup__pictures').appendChild(photoItem);
+        photosElement.appendChild(photoItem);
       });
     }
 
@@ -78,6 +82,8 @@
 
     // Вставляем карточку в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
+
+    card = document.querySelector('.map__card');
   };
 
   // Обработчик нажатия на крестик
@@ -87,17 +93,17 @@
 
   // Слушаем нажатие на ESC
   var onKeypress = function (evt) {
-    if (document.querySelector('.map__card') && evt.keyCode === ESC_KEYCODE) {
+    if (card && evt.keyCode === ESC_KEYCODE) {
       closeCard();
     }
   };
 
   // Закрывам карточку
   var closeCard = function () {
-    if (document.querySelector('.map__card')) {
-      document.querySelector('.map__card .popup__close').removeEventListener('click', onPopupCloseClick);
+    if (card) {
+      card.querySelector('.popup__close').removeEventListener('click', onPopupCloseClick);
       document.removeEventListener('keydown', onKeypress);
-      document.querySelector('.map__card').remove();
+      card.remove();
     }
   };
 
