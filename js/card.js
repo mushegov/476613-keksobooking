@@ -28,69 +28,23 @@
     var template = window.util.templates.card;
     var element = template.cloneNode(true);
 
-    //
-    var avatarElement = element.querySelector('.popup__avatar');
-    var titleElement = element.querySelector('.popup__title');
-    var addressElement = element.querySelector('.popup__address');
-    var priceElement = element.querySelector('.popup__price');
-    var typeElement = element.querySelector('.popup__type');
-    var guestsAndRoomsElement = element.querySelector('.popup__guests-and-rooms');
-    var checkinCheckoutElement = element.querySelector('.popup__checkin-checkout');
+    // Необязательные элементы
     var descriptionElement = element.querySelector('.popup__description');
     var featuresElement = element.querySelector('.popup__features');
     var photosElement = element.querySelector('.popup__pictures');
 
-    //
-    if (data.author.avatar === '') {
-      avatarElement.remove();
-    } else {
-      avatarElement.src = data.author.avatar;
-    }
+    // Обязательные элементы
+    element.querySelector('.popup__avatar').src = data.author.avatar;
+    element.querySelector('.popup__title').textContent = data.offer.title;
+    element.querySelector('.popup__address').textContent = data.offer.address;
+    element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
+    element.querySelector('.popup__type').textContent = Types[data.offer.type];
+    element.querySelector('.popup__guests-and-rooms').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+    element.querySelector('.popup__checkin-checkout').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
 
-    //
-    if (data.offer.title === '') {
-      titleElement.remove();
-    } else {
-      titleElement.textContent = data.offer.title;
-    }
-
-    //
-    if (data.offer.address === '') {
-      addressElement.remove();
-    } else {
-      addressElement.textContent = data.offer.address;
-    }
-
-    //
-    if (data.offer.price === '') {
-      priceElement.remove();
-    } else {
-      priceElement.textContent = data.offer.price + '₽/ночь';
-    }
-
-    //
-    if (data.offer.price === '') {
-      typeElement.remove();
-    } else {
-      typeElement.textContent = Types[data.offer.type];
-    }
-
-    //
-    if (data.offer.rooms === '' || data.offer.guests === '') {
-      guestsAndRoomsElement.remove();
-    } else {
-      guestsAndRoomsElement.textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
-    }
-
-    //
-    if (data.offer.checkin === '' || data.offer.checkout === '') {
-      checkinCheckoutElement.remove();
-    } else {
-      checkinCheckoutElement.textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
-    }
-
-    //
-    if (data.offer.description === '') {
+    // Проверяем на наличие необязательных полей
+    // Описание
+    if (data.offer.description.length === 0) {
       descriptionElement.remove();
     } else {
       descriptionElement.textContent = data.offer.description;
