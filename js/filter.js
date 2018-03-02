@@ -6,6 +6,22 @@
   var HIGH_PRICE = 50000;
 
   var form = document.querySelector('.map__filters');
+  var formElements = form.querySelectorAll('.map__filter, .map__filter-set');
+
+
+  // Переключаем состояние формы
+  var switchFormState = function (state) {
+    var value = false;
+
+    if (state !== 'active') {
+      value = true;
+      form.reset();
+    }
+
+    formElements.forEach(function (element) {
+      element.disabled = value;
+    });
+  };
 
   // Фильтруем по числу
   var filterByNumber = function (formData, filteredData, attr) {
@@ -93,14 +109,9 @@
     }
   });
 
-  // Сбрасываем форму
-  var reset = function () {
-    form.reset();
-  };
-
 
   // EXPORT
   window.filter = {
-    reset: reset
+    state: switchFormState
   };
 })();

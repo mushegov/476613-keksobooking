@@ -11,6 +11,7 @@
       if (xhr.status === 200) {
         window.backend.data = xhr.response;
         onLoad(window.backend.data);
+        window.filter.state('active');
       } else {
         onError('Ошибка! Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

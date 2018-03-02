@@ -27,7 +27,7 @@
     window.pins.hide();
     window.card.hide();
     window.map.reset();
-    window.filter.reset();
+    window.filter.state('inactive');
   };
 
   // Показываем ошибку
