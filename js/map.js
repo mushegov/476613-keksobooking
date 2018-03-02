@@ -109,8 +109,8 @@
     //
     var onMouseUp = function () {
       // Переводим страницу в активный режим, если он неактивный
-      if (window.page.state === 'inactive') {
-        window.page.setStateActive();
+      if (window.state === 'inactive') {
+        window.page.state('active');
       }
 
       // Устанавливаем новый адрес
@@ -132,6 +132,7 @@
 
   // EXPORT
   window.map = {
+    mainPinInitialCoords: mainPinInitialCoords,
     getMainPinCoords: getMainPinCoords,
     onMapClick: onMapClick,
     reset: resetMap
