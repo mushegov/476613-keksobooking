@@ -34,6 +34,9 @@
     form.querySelector('#address').value = '{{' + coords.x + '}}, {{' + coords.y + '}}';
   };
 
+  // Устанавливаем первоначальные координаты
+  setAddress(window.map.getMainPinCoords());
+
   // Переключаем состояние формы
   var switchFormState = function (state) {
     var value = false;
@@ -41,7 +44,7 @@
     if (state !== 'active') {
       value = true;
       form.reset();
-      // тут хочу устанавливать значение геометки
+      setAddress(window.map.mainPinInitialCoords);
     }
 
     fieldsets.forEach(function (fieldset) {
@@ -99,7 +102,7 @@
 
   //
   form.addEventListener('reset', function () {
-    window.page.setStateInactive();
+    window.page.state('inactive');
   });
 
   //
@@ -108,13 +111,13 @@
 
     var data = new FormData(form);
 
-    window.backend.send(data, window.page.setStateInactive, window.page.showError);
+    window.backend.send(data, window.page.state('inactive'), window.page.showError);
   });
 
 
   // EXPORT
   window.form = {
     setAddress: setAddress,
-    switchState: switchFormState
+    state: switchFormState
   };
 })();
