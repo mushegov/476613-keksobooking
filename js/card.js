@@ -2,7 +2,7 @@
 
 (function () {
   // Типы обьявлений
-  var Types = {
+  var TYPES = {
     'flat': 'Квартира',
     'house': 'Бунгало',
     'bungalo': 'Дом',
@@ -38,7 +38,7 @@
     element.querySelector('.popup__title').textContent = data.offer.title;
     element.querySelector('.popup__address').textContent = data.offer.address;
     element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
-    element.querySelector('.popup__type').textContent = Types[data.offer.type];
+    element.querySelector('.popup__type').textContent = TYPES[data.offer.type];
     element.querySelector('.popup__guests-and-rooms').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
     element.querySelector('.popup__checkin-checkout').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
 
