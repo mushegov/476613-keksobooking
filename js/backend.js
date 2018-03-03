@@ -14,9 +14,6 @@
 
         // Передаем данные
         onLoad(window.backend.data);
-
-        // Включаем фильтр геометок
-        window.filter.switchState('active');
       } else {
         onError('Ошибка! Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

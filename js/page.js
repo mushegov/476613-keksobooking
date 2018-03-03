@@ -6,6 +6,12 @@
   var noticeForm = document.querySelector('.notice__form');
 
 
+  // При загрузке данных с сервера
+  var onDataLoad = function (data) {
+    window.filter.switchState('active');
+    window.pins.render(data);
+  };
+
   // Переключаем состояние страницы
   var switchPageState = function (state) {
     if (state === 'active') {
@@ -14,7 +20,7 @@
       map.classList.remove('map--faded');
       noticeForm.classList.remove('notice__form--disabled');
       window.form.switchState(window.state);
-      window.backend.load(window.pins.render, showError);
+      window.backend.load(onDataLoad, showError);
 
       map.addEventListener('click', window.map.onMapClick);
     } else {
