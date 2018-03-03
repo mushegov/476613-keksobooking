@@ -27,7 +27,42 @@
   var roomNumberInput = form.querySelector('#room_number');
   var capacityInput = form.querySelector('#capacity');
   var fieldsets = form.querySelectorAll('fieldset');
+  var avatarChooser = form.querySelector('#avatar');
+  var avatarPreview = form.querySelector('.notice__preview img');
+  var imagesChooser = form.querySelector('#images');
+  var imagesPreview = form.querySelector('.form__photo-container');
 
+
+  // Показывем аватарку
+  var onAvatarChooserChange = function () {
+    var avatar = event.target.files[0];
+    var picReader = new FileReader();
+
+    picReader.addEventListener('load', function () {
+      avatarPreview.src = picReader.result;
+    });
+
+    picReader.readAsDataURL(avatar);
+  };
+
+  // Показываем фото
+  var onImagesChooserChange = function () {
+    var files = event.target.files;
+
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      var picReader = new FileReader();
+
+      picReader.addEventListener('load', function (event) {
+        var picFile = event.target;
+        var img = document.createElement('img');
+        img.src = picFile.result;
+        imagesPreview.appendChild(img);
+      });
+
+      picReader.readAsDataURL(file);
+    }
+  };
 
   // Вносим позицию главной геометки в поле Адрес
   var setAddress = function (coords) {
@@ -111,6 +146,12 @@
 
     window.backend.send(data, window.page.state('inactive'), window.page.showError);
   });
+
+  // Превю аватара
+  avatarChooser.addEventListener('change', onAvatarChooserChange);
+
+  // Превю изображений
+  imagesChooser.addEventListener('change', onImagesChooserChange);
 
 
   // EXPORT
