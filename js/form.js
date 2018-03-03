@@ -52,8 +52,7 @@
   var onImagesChooserChange = function () {
     var files = event.target.files;
 
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
+    [].forEach.call(files, function (file) {
       var picReader = new FileReader();
 
       picReader.addEventListener('load', function (event) {
@@ -65,7 +64,7 @@
       });
 
       picReader.readAsDataURL(file);
-    }
+    });
   };
 
   // Вносим позицию главной геометки в поле Адрес
