@@ -83,8 +83,8 @@
       });
     }
 
-    // Слушаем нажатие на крестик
-    element.querySelector('.popup__close').addEventListener('click', onPopupCloseClick);
+    // Скрываем карточку при нажатии на крестик
+    element.querySelector('.popup__close').addEventListener('click', closeCard);
 
     // Слушаем нажатие на ESC
     document.addEventListener('keydown', onKeypress);
@@ -94,11 +94,6 @@
 
     // Передаем карточку выше
     card = document.querySelector('.map__card');
-  };
-
-  // Скрываем карточку при нажатии на крестик
-  var onPopupCloseClick = function () {
-    closeCard();
   };
 
   // Скрываем карточку при нажатии ESC
@@ -111,7 +106,7 @@
   // Закрывам карточку
   var closeCard = function () {
     if (card) {
-      card.querySelector('.popup__close').removeEventListener('click', onPopupCloseClick);
+      card.querySelector('.popup__close').removeEventListener('click', closeCard);
       document.removeEventListener('keydown', onKeypress);
       card.remove();
     }
