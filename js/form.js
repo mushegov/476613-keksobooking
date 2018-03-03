@@ -139,7 +139,7 @@
 
   //
   form.addEventListener('reset', function () {
-    window.page.state('inactive');
+    window.page.switchState('inactive');
   });
 
   //
@@ -148,7 +148,7 @@
 
     var data = new FormData(form);
 
-    window.backend.send(data, window.page.state('inactive'), window.page.showError);
+    window.backend.send(data, window.page.switchState('inactive'), window.page.showError);
   });
 
   // Превю аватара
@@ -161,6 +161,6 @@
   // EXPORT
   window.form = {
     setAddress: setAddress,
-    state: switchFormState
+    switchState: switchFormState
   };
 })();

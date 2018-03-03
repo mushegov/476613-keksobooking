@@ -112,6 +112,6 @@
 
   // EXPORT
   window.filter = {
-    state: switchFormState
+    switchState: switchFormState
   };
 })();

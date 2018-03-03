@@ -13,7 +13,7 @@
 
       map.classList.remove('map--faded');
       noticeForm.classList.remove('notice__form--disabled');
-      window.form.state(window.state);
+      window.form.switchState(window.state);
       window.backend.load(window.pins.render, showError);
 
       map.addEventListener('click', window.map.onMapClick);
@@ -22,8 +22,8 @@
 
       map.classList.add('map--faded');
       noticeForm.classList.add('notice__form--disabled');
-      window.form.state(window.state);
-      window.filter.state(window.state);
+      window.form.switchState(window.state);
+      window.filter.switchState(window.state);
       window.pins.hide();
       window.card.hide();
       window.map.reset();
@@ -53,7 +53,7 @@
 
   // EXPORT
   window.page = {
-    state: switchPageState,
+    switchState: switchPageState,
     showError: showError
   };
 })();
