@@ -11,19 +11,28 @@
   // Смещение по оси Y для рендера геометки
   var MAIN_PIN_OFFSET_Y = 50;
 
-  // Элементы
   var mainPin = document.querySelector('.map__pin--main');
+  var mainPinInitialCoords;
 
 
   // Получаем координаты главной геометки
-  var getMainPinCoords = function (isInitial) {
-    var x = mainPin.offsetLeft;
-    var y = isInitial ? mainPin.offsetTop : mainPin.offsetTop + MAIN_PIN_OFFSET_Y;
+  var getMainPinCoords = function () {
+    var coords = {
+      x: mainPin.offsetLeft,
+      y: mainPin.offsetTop + MAIN_PIN_OFFSET_Y
+    };
 
-    return '{{' + x + '}}, {{' + y + '}}';
+    return coords;
+  };
+  mainPinInitialCoords = getMainPinCoords();
+
+  // Устанавливаем главной метке изначальные координаты
+  var resetMap = function () {
+    mainPin.style.top = mainPinInitialCoords.y - MAIN_PIN_OFFSET_Y + 'px';
+    mainPin.style.left = mainPinInitialCoords.x + 'px';
   };
 
-  //
+  // Слушаем нажатия на геометки
   var onMapClick = function (evt) {
     var target = evt.target;
     var id;
@@ -65,14 +74,13 @@
     return coords;
   };
 
-  //
+  // Драг-н-дроп для главной геометки
   var onMainPinMouseDown = function (evt) {
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
 
-    //
     var onMouseMove = function (moveEvt) {
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -96,17 +104,16 @@
       mainPin.style.left = (newCoords.x) + 'px';
     };
 
-    //
     var onMouseUp = function () {
       // Переводим страницу в активный режим, если он неактивный
-      if (window.page.state === 'inactive') {
-        window.page.setStateActive();
+      if (window.state === 'inactive') {
+        window.page.switchState('active');
       }
 
       // Устанавливаем новый адрес
-      window.form.setAddress(false);
+      window.form.setAddress(getMainPinCoords());
 
-      //
+      // Отключаем слушатели
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -115,14 +122,15 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-
   // Слушатели
   mainPin.addEventListener('mousedown', onMainPinMouseDown);
 
 
   // EXPORT
   window.map = {
+    mainPinInitialCoords: mainPinInitialCoords,
     getMainPinCoords: getMainPinCoords,
-    onMapClick: onMapClick
+    onMapClick: onMapClick,
+    reset: resetMap
   };
 })();

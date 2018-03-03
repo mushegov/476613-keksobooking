@@ -1,44 +1,46 @@
 'use strict';
 
 (function () {
-  var state = 'inactive';
+  window.state = 'inactive'; // EXPORT
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
 
-  // Переводим страницу в активный режим
-  var setPageStateActive = function () {
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
-    state = 'active';
 
-    window.form.switchState('active');
-
-    // Обработчик нажатия на карту
-    map.addEventListener('click', window.map.onMapClick);
-
-    // Отрисовываем элемент списка геометок
-    window.backend.load(window.pins.render, showError);
+  // При загрузке данных с сервера
+  var onDataLoad = function (data) {
+    window.filter.switchState('active');
+    window.pins.render(data);
   };
 
-  // Переводим страницу в неактивный режим
-  var setPageStateInactive = function () {
-    map.classList.add('map--faded');
-    noticeForm.classList.add('notice__form--disabled');
-    state = 'inactive';
+  // Переключаем состояние страницы
+  var switchPageState = function (state) {
+    if (state === 'active') {
+      window.state = 'active'; // EXPORT
 
-    window.form.switchState('inactive');
+      map.classList.remove('map--faded');
+      noticeForm.classList.remove('notice__form--disabled');
+      window.form.switchState(window.state);
+      window.backend.load(onDataLoad, showError);
 
-    // Обработчик нажатия на карту
-    map.removeEventListener('click', window.map.onMapClick);
+      map.addEventListener('click', window.map.onMapClick);
+    } else {
+      window.state = 'inactive'; // EXPORT
 
-    // Удаляем геометки
-    window.pins.hide();
+      map.classList.add('map--faded');
+      noticeForm.classList.add('notice__form--disabled');
+      window.form.switchState(window.state);
+      window.filter.switchState(window.state);
+      window.pins.hide();
+      window.card.hide();
+      window.map.reset();
 
-    // Сбрасываем форму фильтра геометок
-    window.filter.reset();
+      map.removeEventListener('click', window.map.onMapClick);
+
+      window.scrollTo(0, 0);
+    }
   };
 
-  //
+  // Показываем ошибку
   var showError = function (errorText, duration) {
     duration = duration || 5000;
     var errorDiv = document.createElement('div');
@@ -49,7 +51,7 @@
     setTimeout(hideError, duration);
   };
 
-  //
+  // Скрываем ошибку
   var hideError = function () {
     document.querySelector('.error-message').remove();
   };
@@ -57,9 +59,7 @@
 
   // EXPORT
   window.page = {
-    state: state,
-    setStateActive: setPageStateActive,
-    setStateInactive: setPageStateInactive,
+    switchState: switchPageState,
     showError: showError
   };
 })();

@@ -9,57 +9,113 @@
     'palace': 'Дворец'
   };
 
+  // Размер фото
+  var PHOTO_HEIGHT = 30;
+
+  // Код ESC
+  var ESC_KEYCODE = 27;
+
+  // Сюда запишем элемент карточки
+  var card;
+
 
   // Отрисовываем элемент карточку предложени
   var renderCard = function (data) {
+    // Удаляем предыдущую карточку
+    closeCard();
+
     // Создаем шаблон
     var template = window.util.templates.card;
-
-    // Создаем элемент из шаблона
     var element = template.cloneNode(true);
 
-    // Записываем данные
+    // Необязательные элементы
+    var descriptionElement = element.querySelector('.popup__description');
+    var featuresElement = element.querySelector('.popup__features');
+    var photosElement = element.querySelector('.popup__pictures');
+
+    // Обязательные элементы
     element.querySelector('.popup__avatar').src = data.author.avatar;
-    element.querySelector('h3').textContent = data.offer.title;
-    element.querySelector('p small').textContent = data.offer.address;
+    element.querySelector('.popup__title').textContent = data.offer.title;
+    element.querySelector('.popup__address').textContent = data.offer.address;
     element.querySelector('.popup__price').textContent = data.offer.price + '₽/ночь';
-    element.querySelector('h4').textContent = TYPES[data.offer.type];
-    element.querySelector('h4 + p').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
-    element.querySelector('h4 + p + p').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
-    element.querySelector('.popup__features + p').textContent = data.offer.description;
+    element.querySelector('.popup__type').textContent = TYPES[data.offer.type];
+    element.querySelector('.popup__guests-and-rooms').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+    element.querySelector('.popup__checkin-checkout').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
 
-    // Отрисовываем удобства
-    // Очищаем элемент
-    window.util.deleteNodeChildren(element.querySelector('.popup__features'));
-
-    // Генерируем элементы для каждого удобства
-    for (var i = 0; i < data.offer.features.length; i++) {
-      var featuresItem = document.createElement('li');
-      featuresItem.classList.add('feature', 'feature--' + data.offer.features[i]);
-      element.querySelector('.popup__features').appendChild(featuresItem);
+    // Проверяем на наличие необязательных полей
+    // Описание
+    if (data.offer.description.length === 0) {
+      descriptionElement.remove();
+    } else {
+      descriptionElement.textContent = data.offer.description;
     }
 
-    // Отрисовываем фото
-    window.util.deleteNodeChildren(element.querySelector('.popup__pictures'));
+    // Удобства
+    if (data.offer.features.length === 0) {
+      featuresElement.remove();
+    } else {
+      // Очищаем элемент
+      featuresElement = window.util.deleteNodeChildren(featuresElement);
+
+      data.offer.features.forEach(function (feature) {
+        var featuresItem = document.createElement('li');
+        featuresItem.classList.add('feature', 'feature--' + feature);
+        featuresElement.appendChild(featuresItem);
+      });
+    }
 
     // Фото
-    for (var j = 0; j < data.offer.photos.length; j++) {
-      var photoItem = document.createElement('li');
-      var image = document.createElement('img');
+    if (data.offer.photos.length === 0) {
+      photosElement.remove();
+    } else {
+      // Очищаем элемент
+      photosElement = window.util.deleteNodeChildren(photosElement);
 
-      image.src = data.offer.photos[j];
-      image.width = 210;
+      data.offer.photos.forEach(function (photo) {
+        var photoItem = document.createElement('li');
+        var image = document.createElement('img');
 
-      photoItem.appendChild(image);
-      element.querySelector('.popup__pictures').appendChild(photoItem);
+        image.src = photo;
+        image.height = PHOTO_HEIGHT;
+
+        photoItem.appendChild(image);
+        photosElement.appendChild(photoItem);
+      });
     }
 
-    // Вставляем готовый фрагмент в DOM
+    // Скрываем карточку при нажатии на крестик
+    element.querySelector('.popup__close').addEventListener('click', closeCard);
+
+    // Слушаем нажатие на ESC
+    document.addEventListener('keydown', onKeypress);
+
+    // Вставляем карточку в DOM
     document.querySelector('.map').insertBefore(element, document.querySelector('.map__filters-container'));
+
+    // Передаем карточку выше
+    card = document.querySelector('.map__card');
   };
+
+  // Скрываем карточку при нажатии ESC
+  var onKeypress = function (evt) {
+    if (card && evt.keyCode === ESC_KEYCODE) {
+      closeCard();
+    }
+  };
+
+  // Закрывам карточку
+  var closeCard = function () {
+    if (card) {
+      card.querySelector('.popup__close').removeEventListener('click', closeCard);
+      document.removeEventListener('keydown', onKeypress);
+      card.remove();
+    }
+  };
+
 
   // EXPORT
   window.card = {
-    render: renderCard
+    render: renderCard,
+    hide: closeCard
   };
 })();
