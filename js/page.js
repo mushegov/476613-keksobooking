@@ -1,38 +1,36 @@
 'use strict';
 
 (function () {
-  window.state = 'inactive';
+  window.state = 'inactive'; // EXPORT
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
 
+
   // Переключаем состояние страницы
   var switchPageState = function (state) {
-    switch (state) {
-      case 'inactive':
-        window.state = 'inactive';
+    if (state === 'active') {
+      window.state = 'active'; // EXPORT
 
-        map.classList.add('map--faded');
-        noticeForm.classList.add('notice__form--disabled');
-        window.form.state(window.state);
-        window.filter.state(window.state);
-        window.pins.hide();
-        window.card.hide();
-        window.map.reset();
+      map.classList.remove('map--faded');
+      noticeForm.classList.remove('notice__form--disabled');
+      window.form.state(window.state);
+      window.backend.load(window.pins.render, showError);
 
-        map.removeEventListener('click', window.map.onMapClick);
+      map.addEventListener('click', window.map.onMapClick);
+    } else {
+      window.state = 'inactive'; // EXPORT
 
-        window.scrollTo(0, 0);
+      map.classList.add('map--faded');
+      noticeForm.classList.add('notice__form--disabled');
+      window.form.state(window.state);
+      window.filter.state(window.state);
+      window.pins.hide();
+      window.card.hide();
+      window.map.reset();
 
-        break;
-      default:
-        window.state = 'active';
+      map.removeEventListener('click', window.map.onMapClick);
 
-        map.classList.remove('map--faded');
-        noticeForm.classList.remove('notice__form--disabled');
-        window.form.state(window.state);
-        window.backend.load(window.pins.render, showError);
-
-        map.addEventListener('click', window.map.onMapClick);
+      window.scrollTo(0, 0);
     }
   };
 
