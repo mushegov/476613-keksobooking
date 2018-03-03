@@ -147,7 +147,7 @@
 
     var data = new FormData(form);
 
-    window.backend.send(data, window.page.switchState('inactive'), window.page.showError);
+    window.backend.send(data, window.page.switchState, window.page.showError);
   });
 
   // Превю аватара

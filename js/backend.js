@@ -39,7 +39,7 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onLoad();
+        onLoad('inactive');
       } else {
         onError('Ошибка! Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
