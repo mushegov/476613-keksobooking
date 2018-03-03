@@ -18,6 +18,9 @@
     '100': [0]
   };
 
+  // Размер фото
+  var PHOTO_WIDTH = 150;
+
   // Элементы
   var form = document.querySelector('.notice__form');
   var typeInput = form.querySelector('#type');
@@ -56,6 +59,7 @@
       picReader.addEventListener('load', function (event) {
         var picFile = event.target;
         var img = document.createElement('img');
+        img.style.width = PHOTO_WIDTH + 'px';
         img.src = picFile.result;
         imagesPreview.appendChild(img);
       });
