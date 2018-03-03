@@ -10,7 +10,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         // Получаем данные
-        window.backend.data = xhr.response;
+        window.backend.data = xhr.response; // EXPORT
 
         // Передаем данные
         onLoad(window.backend.data);

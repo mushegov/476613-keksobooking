@@ -51,10 +51,10 @@
     });
   };
 
-  // Обработчик
+  // Обработчики
+  //
   var onRoomNumberInputChange = function (evt) {
-    var value = evt.target.value;
-    var capacity = ROOMS_CAPACITY[value];
+    var capacity = ROOMS_CAPACITY[evt.target.value];
     var options = capacityInput.querySelectorAll('option');
 
     // Отключаем все опции
@@ -71,7 +71,6 @@
       capacityInput.querySelector('.capacity' + capacity[i]).disabled = false;
     });
   };
-
 
   // Слушатели
   //

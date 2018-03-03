@@ -6,6 +6,7 @@
   var DEBOUNCE_INTERVAL = 500;
   var lastTimeout;
 
+
   // Очиащаем элемент
   var deleteNodeChildren = function (element) {
     var parent = element.parentNode;

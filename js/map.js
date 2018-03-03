@@ -32,7 +32,7 @@
     mainPin.style.left = mainPinInitialCoords.x + 'px';
   };
 
-  //
+  // Слушаем нажатия на геометки
   var onMapClick = function (evt) {
     var target = evt.target;
     var id;
@@ -74,14 +74,13 @@
     return coords;
   };
 
-  //
+  // Драг-н-дроп для главной геометки
   var onMainPinMouseDown = function (evt) {
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
 
-    //
     var onMouseMove = function (moveEvt) {
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -105,7 +104,6 @@
       mainPin.style.left = (newCoords.x) + 'px';
     };
 
-    //
     var onMouseUp = function () {
       // Переводим страницу в активный режим, если он неактивный
       if (window.state === 'inactive') {
@@ -115,7 +113,7 @@
       // Устанавливаем новый адрес
       window.form.setAddress(getMainPinCoords());
 
-      //
+      // Отключаем слушатели
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -123,7 +121,6 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   };
-
 
   // Слушатели
   mainPin.addEventListener('mousedown', onMainPinMouseDown);
