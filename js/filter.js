@@ -4,6 +4,8 @@
   // Ранжирование цен
   var LOW_PRICE = 10000;
   var HIGH_PRICE = 50000;
+  var ERROR_SHOW_DURATION = 2500;
+  var ERROR_MESSAGE = 'Нет подходящих объявлений. Измените фильтр.';
 
   var form = document.querySelector('.map__filters');
   var formElements = form.querySelectorAll('.map__filter, .map__filter-set');
@@ -105,7 +107,7 @@
 
     // Если фильтр не дал результата показываем ошибку
     if (!filteredPinsId.length) {
-      window.page.showError('Нет подходящих объявлений. Измените фильтр.', 2500);
+      window.page.showError(ERROR_MESSAGE, ERROR_SHOW_DURATION);
     }
   });
 

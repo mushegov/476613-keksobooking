@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var DEFAULT_ERROR_SHOW_DURATION = 5000;
+
   window.state = 'inactive'; // EXPORT
   var map = document.querySelector('.map');
   var noticeForm = document.querySelector('.notice__form');
@@ -42,7 +44,7 @@
 
   // Показываем ошибку
   var showError = function (errorText, duration) {
-    duration = duration || 5000;
+    duration = duration || DEFAULT_ERROR_SHOW_DURATION;
     var errorDiv = document.createElement('div');
     errorDiv.classList.add('error-message');
     errorDiv.textContent = errorText;
