@@ -130,7 +130,7 @@
   window.map = {
     mainPinInitialCoords: mainPinInitialCoords,
     getMainPinCoords: getMainPinCoords,
-    onMapClick: onMapClick,
+    onClick: onMapClick,
     reset: resetMap
   };
 })();
