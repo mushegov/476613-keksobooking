@@ -24,7 +24,7 @@
       window.form.switchState(window.state);
       window.backend.load(onDataLoad, showError);
 
-      map.addEventListener('click', window.map.onMapClick);
+      map.addEventListener('click', window.map.onClick);
     } else {
       window.state = 'inactive'; // EXPORT
 
@@ -36,7 +36,7 @@
       window.card.hide();
       window.map.reset();
 
-      map.removeEventListener('click', window.map.onMapClick);
+      map.removeEventListener('click', window.map.onClick);
 
       window.scrollTo(0, 0);
     }
